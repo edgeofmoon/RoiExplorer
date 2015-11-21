@@ -13,10 +13,770 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Legacy">
+      <UniqueIdentifier>{36794828-0690-4673-a58f-cec487931948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Legacy\MyLibs">
+      <UniqueIdentifier>{2b6a291d-1558-4759-ad15-505b706cfd85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Legacy\HeightField">
+      <UniqueIdentifier>{26bdfc34-fe5d-4fde-9d03-f325061300e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Legacy\MyContourTree">
+      <UniqueIdentifier>{11e29113-69ee-47ae-a502-56ac328dfc9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Legacy\MyGraphics">
+      <UniqueIdentifier>{65e2f95c-dce2-48fd-81e3-86ab2d4faf9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Legacy\Ric">
+      <UniqueIdentifier>{ce26dde0-5896-4bdf-a760-ab74a1fe20da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{dd460a4d-bad3-495b-bd11-ab31a348b780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BubbleSets">
+      <UniqueIdentifier>{92989186-2e16-4eac-9277-b97498b06bdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContourTree">
+      <UniqueIdentifier>{7964b4e6-e847-4f56-9f29-3835d54b4365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Segments">
+      <UniqueIdentifier>{e217c4f7-5e0d-4854-b592-cb288b737d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BubbleSets">
+      <UniqueIdentifier>{bdab9cf7-d5ca-48a8-a92e-3f834785a5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContourTree">
+      <UniqueIdentifier>{891a93c5-3519-47fb-bf3d-d35e25f5f16f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Segments">
+      <UniqueIdentifier>{57ea327d-dac0-4f0e-98f7-72bb377488e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyLibs\MyString.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyArrayMD.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\Ball.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\BallAux.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\BallMath.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\FollowCubeTables.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Collapse.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Construction.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Contour_Follow.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Debug.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Draw_Trees.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Flexible.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Layout.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Marching_Cubes.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\HeightField_Utilities.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\Superarc.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightField\Supernode.cpp">
+      <Filter>Legacy\HeightField</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyGraphicsTool.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyImage.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyMesh.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyPrimitiveDrawer.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyQuarternion.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyVolumeRenderer.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\Shader.cpp">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyTrackBall.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\adler32.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\compress.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\crc32.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\deflate.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\gzio.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\infback.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\inffast.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\inflate.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\inftrees.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\minigzip.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\nemardr.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\nifti1_io.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\NiftiOrientConvert.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicMesh.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicMeshSet.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicTexture.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicTextureSet.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicUtil.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicVolume.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\RicVolumeSet.cpp">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\trees.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\uncompr.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\znzlib.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="Ric\zutil.c">
+      <Filter>Legacy\Ric</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyBoundingBox.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyMathHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyUiPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MySpaceFillingNaive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_Aggregate.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_ContourDrawing.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_DiffTree.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_Layout.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_Prune.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyContourTree\MyContourTree_VolumeRendering.cpp">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorScaleTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDataReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyTimer.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="testSegmenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\svd.c">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="testSegsVolRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTracks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLabelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\OSCB.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCohortPlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDistanceLayout2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testJoinTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyOrderedList.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGridMD.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBloomDrawingHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testBloomDrawing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testMultiCohorts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLineConnectorDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyIsosurfaceTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testIsosurfaceTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MySurfaceRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVoxContainer.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBubbleSetsDrawingHelper.cpp">
+      <Filter>Source Files\BubbleSets</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMarchingSquares.cpp">
+      <Filter>Source Files\BubbleSets</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTree.cpp">
+      <Filter>Source Files\ContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTreeDrawer.cpp">
+      <Filter>Source Files\ContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTreeLayout.cpp">
+      <Filter>Source Files\ContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTreeROI.cpp">
+      <Filter>Source Files\ContourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegmentAssembleGroup.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegmentNode.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegmentNodeInfo.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegmentNodeMatch.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegmentNodeMatchCounter.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegNodeInfoAssemble.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegNodeInfoEncoder.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegNodeInfoEncoder2D.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegNodeInfoLayout2D.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsPlanarDrawer.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsPlanarDrawer_old.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsVolRenderer.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegTrkNetwork.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVolumnSimilarity.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVolumeSegmenterTemplate.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVolumeSegmenterVox.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVolSegVoxContourTree.cpp">
+      <Filter>Source Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyComponentFilter.cpp">
+      <Filter>Source Files\ContourTree</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyLibs\MyArray.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyString.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyVec.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyMap.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\Array3D.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\Ball.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\BallAux.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\BallMath.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\Component.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\FollowCubeTables.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\HeightField.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\PriorityIndex.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\Superarc.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightField\Supernode.h">
+      <Filter>Legacy\HeightField</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyColor4.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyFrameBuffer.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyGraphicsTool.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyImage.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyLine.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyMesh.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyPolyLine.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyPrimitiveDrawer.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyQuarternion.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyVolumeRenderer.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\Shader.h">
+      <Filter>Legacy\MyGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGLHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyMatrix.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyTrackBall.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\crc32.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\deflate.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\dtypes.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\inffast.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\inffixed.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\inflate.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\inftrees.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\nemardr.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\nifti1.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\nifti1_io.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicMatrix.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicMesh.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicMeshSet.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicPoint.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicTexture.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicTextureSet.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicUtil.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicVolume.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\RicVolumeSet.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\trees.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\zconf.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\zconf.in.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\zlib.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\znzlib.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="Ric\zutil.h">
+      <Filter>Legacy\Ric</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyBoundingBox.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyMathHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyUiPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MySpaceFillingNaive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyContourTree\MyContourTree.h">
+      <Filter>Legacy\MyContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorScaleTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDataReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyTimer.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\svd.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MySharedPointer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTracks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLabelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCanvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\dirent.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\OSCB.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumnSimilarity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCohortPlot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDistanceLayout2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyOrderedList_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGridMD_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBloomDrawingHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLineConnectorDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyIsosurfaceTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MySurfaceRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMarchingSquares.h">
+      <Filter>Header Files\BubbleSets</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBubbleSetsDrawingHelper.h">
+      <Filter>Header Files\BubbleSets</Filter>
+    </ClInclude>
+    <ClInclude Include="MyComponent.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MyComponentFilter.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MyJoinTree.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MyJoinTreeDrawer.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MyJoinTreeLayout.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MyJoinTreeROI.h">
+      <Filter>Header Files\ContourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNode.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeInfo.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeMatch.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeMatchCounter.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoAssemble.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoEncoder.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoEncoder2D.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoLayout2D.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVoxContainer_header.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumeSegmenterVox.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumeSegmenterTemplate.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolSegVoxContourTree.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegTrkNetwork.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegsPlanarDrawer.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegsVolRenderer.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentAssembleGroup.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\contour.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\contour.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\coord.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\coord.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\fisheye.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\fisheye.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\mesh.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\mesh.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\plane.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\plane.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\raycasting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\raycasting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\selVol.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\selVol.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\tracks.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\tracks.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\trackVol.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\trackVol.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\trackVol_pcwLinear.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\tube.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\tube.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\base.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\base.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\simple.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\simple.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

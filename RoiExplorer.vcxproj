@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -22,7 +30,20 @@
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
@@ -35,15 +56,35 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <SourcePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;$(SourcePath)</SourcePath>
+    <IncludePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;C:\Users\GuohaoZhang\Downloads\eigen3;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <SourcePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;$(SourcePath)</SourcePath>
+    <IncludePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;C:\Users\GuohaoZhang\Downloads\eigen3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <SourcePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;$(SourcePath)</SourcePath>
+    <IncludePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;C:\Users\GuohaoZhang\Downloads\eigen3;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <SourcePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;$(SourcePath)</SourcePath>
+    <IncludePath>.\Ric;.\MyLibs;.\HeightField;.\MyGraphics;.\MyContourTree;.;C:\Users\GuohaoZhang\Downloads\eigen3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -52,10 +93,30 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4267; 4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4267 /ignore:4244 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4267; 4244</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4267 /ignore:4244 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -67,16 +128,328 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4267; 4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4267 /ignore:4244 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4267; 4244</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4267 /ignore:4244 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ColorScaleTable.cpp" />
+    <ClCompile Include="HeightField\Ball.cpp" />
+    <ClCompile Include="HeightField\BallAux.cpp" />
+    <ClCompile Include="HeightField\BallMath.cpp" />
+    <ClCompile Include="HeightField\FollowCubeTables.cpp" />
+    <ClCompile Include="HeightField\HeightField_Collapse.cpp" />
+    <ClCompile Include="HeightField\HeightField_Construction.cpp" />
+    <ClCompile Include="HeightField\HeightField_Contour_Follow.cpp" />
+    <ClCompile Include="HeightField\HeightField_Debug.cpp" />
+    <ClCompile Include="HeightField\HeightField_Draw_Trees.cpp" />
+    <ClCompile Include="HeightField\HeightField_Flexible.cpp" />
+    <ClCompile Include="HeightField\HeightField_Layout.cpp" />
+    <ClCompile Include="HeightField\HeightField_Marching_Cubes.cpp" />
+    <ClCompile Include="HeightField\HeightField_Utilities.cpp" />
+    <ClCompile Include="HeightField\Superarc.cpp" />
+    <ClCompile Include="HeightField\Supernode.cpp" />
+    <ClCompile Include="main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MyBloomDrawingHelper.cpp" />
+    <ClCompile Include="MyGridMD.h" />
+    <ClCompile Include="MyBitmap.cpp" />
+    <ClCompile Include="MyCanvas.cpp" />
+    <ClCompile Include="MyCohortPlot.cpp" />
+    <ClCompile Include="MyComponentFilter.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_Aggregate.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_ContourDrawing.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_DiffTree.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_Layout.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_Prune.cpp" />
+    <ClCompile Include="MyContourTree\MyContourTree_VolumeRendering.cpp" />
+    <ClCompile Include="MyDataReader.cpp" />
+    <ClCompile Include="MyDistanceLayout2D.cpp" />
+    <ClCompile Include="MyGraphics\MyGraphicsTool.cpp" />
+    <ClCompile Include="MyGraphics\MyImage.cpp" />
+    <ClCompile Include="MyGraphics\MyMesh.cpp" />
+    <ClCompile Include="MyGraphics\MyPrimitiveDrawer.cpp" />
+    <ClCompile Include="MyGraphics\MyQuarternion.cpp" />
+    <ClCompile Include="MyGraphics\MyVolumeRenderer.cpp" />
+    <ClCompile Include="MyGraphics\Shader.cpp" />
+    <ClCompile Include="MyIsosurfaceTracker.cpp" />
+    <ClCompile Include="MyJoinTree.cpp" />
+    <ClCompile Include="MyJoinTreeDrawer.cpp" />
+    <ClCompile Include="MyJoinTreeLayout.cpp" />
+    <ClCompile Include="MyJoinTreeROI.cpp" />
+    <ClCompile Include="MyLabelManager.cpp" />
+    <ClCompile Include="MyLibs\MyArrayMD.h" />
+    <ClCompile Include="MyLibs\MyBoundingBox.cpp" />
+    <ClCompile Include="MyLibs\MyMathHelper.cpp" />
+    <ClCompile Include="MyLibs\MyString.cpp" />
+    <ClCompile Include="MyLibs\MyTimer.cpp" />
+    <ClCompile Include="MyLibs\MyTrackBall.cpp" />
+    <ClCompile Include="MyLibs\OSCB.cpp" />
+    <ClCompile Include="MyLibs\svd.c" />
+    <ClCompile Include="MyLineConnectorDrawer.cpp" />
+    <ClCompile Include="MyMarchingSquares.cpp" />
+    <ClCompile Include="MyNode.cpp" />
+    <ClCompile Include="MyOrderedList.h" />
+    <ClCompile Include="MyBubbleSetsDrawingHelper.cpp" />
+    <ClCompile Include="MySegmentAssembleGroup.cpp" />
+    <ClCompile Include="MySegmentNodeMatch.cpp" />
+    <ClCompile Include="MySegmentNodeMatchCounter.cpp" />
+    <ClCompile Include="MySegNodeInfoAssemble.cpp" />
+    <ClCompile Include="MySegmentNode.cpp" />
+    <ClCompile Include="MySegNodeInfoEncoder.cpp" />
+    <ClCompile Include="MySegmentNodeInfo.cpp" />
+    <ClCompile Include="MySegNodeInfoEncoder2D.cpp" />
+    <ClCompile Include="MySegNodeInfoLayout2D.cpp" />
+    <ClCompile Include="MySegsPlanarDrawer.cpp" />
+    <ClCompile Include="MySegsPlanarDrawer_old.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MySegsVolRenderer.cpp" />
+    <ClCompile Include="MySegTrkNetwork.cpp" />
+    <ClCompile Include="MySpaceFillingNaive.cpp" />
+    <ClCompile Include="MySurfaceRenderer.cpp" />
+    <ClCompile Include="MyTracks.cpp" />
+    <ClCompile Include="MyUiPanel.cpp" />
+    <ClCompile Include="MyVolumeSegmenterTemplate.cpp" />
+    <ClCompile Include="MyVolumeSegmenterVox.cpp" />
+    <ClCompile Include="MyVolSegVoxContourTree.cpp" />
+    <ClCompile Include="MyVolumnSimilarity.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MyVoxContainer.h" />
+    <ClCompile Include="Ric\adler32.c" />
+    <ClCompile Include="Ric\compress.c" />
+    <ClCompile Include="Ric\crc32.c" />
+    <ClCompile Include="Ric\deflate.c" />
+    <ClCompile Include="Ric\gzio.c" />
+    <ClCompile Include="Ric\infback.c" />
+    <ClCompile Include="Ric\inffast.c" />
+    <ClCompile Include="Ric\inflate.c" />
+    <ClCompile Include="Ric\inftrees.c" />
+    <ClCompile Include="Ric\minigzip.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Ric\nemardr.cpp" />
+    <ClCompile Include="Ric\nifti1_io.c" />
+    <ClCompile Include="Ric\NiftiOrientConvert.cpp" />
+    <ClCompile Include="Ric\RicMesh.cpp" />
+    <ClCompile Include="Ric\RicMeshSet.cpp" />
+    <ClCompile Include="Ric\RicTexture.cpp" />
+    <ClCompile Include="Ric\RicTextureSet.cpp" />
+    <ClCompile Include="Ric\RicUtil.cpp" />
+    <ClCompile Include="Ric\RicVolume.cpp" />
+    <ClCompile Include="Ric\RicVolumeSet.cpp" />
+    <ClCompile Include="Ric\trees.c" />
+    <ClCompile Include="Ric\uncompr.c" />
+    <ClCompile Include="Ric\znzlib.c" />
+    <ClCompile Include="Ric\zutil.c" />
+    <ClCompile Include="testBloomDrawing.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="testIsosurfaceTracker.cpp" />
+    <ClCompile Include="testJoinTree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="testMultiCohorts.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="testSegmenter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="testSegsVolRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ColorScaleTable.h" />
+    <ClInclude Include="HeightField\Array3D.h" />
+    <ClInclude Include="HeightField\Ball.h" />
+    <ClInclude Include="HeightField\BallAux.h" />
+    <ClInclude Include="HeightField\BallMath.h" />
+    <ClInclude Include="HeightField\Component.h" />
+    <ClInclude Include="HeightField\FollowCubeTables.h" />
+    <ClInclude Include="HeightField\HeightField.h" />
+    <ClInclude Include="HeightField\PriorityIndex.h" />
+    <ClInclude Include="HeightField\Superarc.h" />
+    <ClInclude Include="HeightField\Supernode.h" />
+    <ClInclude Include="MyBloomDrawingHelper.h" />
+    <ClInclude Include="MyGridMD_header.h" />
+    <ClInclude Include="MyBitmap.h" />
+    <ClInclude Include="MyCanvas.h" />
+    <ClInclude Include="MyCohortPlot.h" />
+    <ClInclude Include="MyComponent.h" />
+    <ClInclude Include="MyComponentFilter.h" />
+    <ClInclude Include="MyContourTree\MyContourTree.h" />
+    <ClInclude Include="MyDataReader.h" />
+    <ClInclude Include="MyDistanceLayout2D.h" />
+    <ClInclude Include="MyGLHeader.h" />
+    <ClInclude Include="MyGraphics\MyColor4.h" />
+    <ClInclude Include="MyGraphics\MyFrameBuffer.h" />
+    <ClInclude Include="MyGraphics\MyGraphicsTool.h" />
+    <ClInclude Include="MyGraphics\MyImage.h" />
+    <ClInclude Include="MyGraphics\MyLine.h" />
+    <ClInclude Include="MyGraphics\MyMesh.h" />
+    <ClInclude Include="MyGraphics\MyPolyLine.h" />
+    <ClInclude Include="MyGraphics\MyPrimitiveDrawer.h" />
+    <ClInclude Include="MyGraphics\MyQuarternion.h" />
+    <ClInclude Include="MyGraphics\MyVolumeRenderer.h" />
+    <ClInclude Include="MyGraphics\Shader.h" />
+    <ClInclude Include="MyIsosurfaceTracker.h" />
+    <ClInclude Include="MyJoinTree.h" />
+    <ClInclude Include="MyJoinTreeDrawer.h" />
+    <ClInclude Include="MyJoinTreeLayout.h" />
+    <ClInclude Include="MyJoinTreeROI.h" />
+    <ClInclude Include="MyLabelManager.h" />
+    <ClInclude Include="MyLibs\dirent.h" />
+    <ClInclude Include="MyLibs\MyArray.h" />
+    <ClInclude Include="MyLibs\MyBoundingBox.h" />
+    <ClInclude Include="MyLibs\MyBox.h" />
+    <ClInclude Include="MyLibs\MyMap.h" />
+    <ClInclude Include="MyLibs\MyMathHelper.h" />
+    <ClInclude Include="MyLibs\MyMatrix.h" />
+    <ClInclude Include="MyLibs\MyString.h" />
+    <ClInclude Include="MyLibs\MyTimer.h" />
+    <ClInclude Include="MyLibs\MyTrackBall.h" />
+    <ClInclude Include="MyLibs\MyUtility.h" />
+    <ClInclude Include="MyLibs\MyVec.h" />
+    <ClInclude Include="MyLibs\OSCB.h" />
+    <ClInclude Include="MyLibs\svd.h" />
+    <ClInclude Include="MyLineConnectorDrawer.h" />
+    <ClInclude Include="MyMarchingSquares.h" />
+    <ClInclude Include="MyNode.h" />
+    <ClInclude Include="MyOrderedList_header.h" />
+    <ClInclude Include="MyBubbleSetsDrawingHelper.h" />
+    <ClInclude Include="MySegmentAssembleGroup.h" />
+    <ClInclude Include="MySegmentNodeMatch.h" />
+    <ClInclude Include="MySegmentNodeMatchCounter.h" />
+    <ClInclude Include="MySegNodeInfoAssemble.h" />
+    <ClInclude Include="MySegmentNode.h" />
+    <ClInclude Include="MySegNodeInfoEncoder.h" />
+    <ClInclude Include="MySegmentNodeInfo.h" />
+    <ClInclude Include="MySegNodeInfoEncoder2D.h" />
+    <ClInclude Include="MySegNodeInfoLayout2D.h" />
+    <ClInclude Include="MySegsPlanarDrawer.h" />
+    <ClInclude Include="MySegsVolRenderer.h" />
+    <ClInclude Include="MySegTrkNetwork.h" />
+    <ClInclude Include="MySharedPointer.h" />
+    <ClInclude Include="MySpaceFillingNaive.h" />
+    <ClInclude Include="MySurfaceRenderer.h" />
+    <ClInclude Include="MyTracks.h" />
+    <ClInclude Include="MyUiPanel.h" />
+    <ClInclude Include="MyVolumeSegmenterTemplate.h" />
+    <ClInclude Include="MyVolumeSegmenterVox.h" />
+    <ClInclude Include="MyVolSegVoxContourTree.h" />
+    <ClInclude Include="MyVolumnSimilarity.h" />
+    <ClInclude Include="MyVoxContainer_header.h" />
+    <ClInclude Include="Ric\crc32.h" />
+    <ClInclude Include="Ric\deflate.h" />
+    <ClInclude Include="Ric\dtypes.h" />
+    <ClInclude Include="Ric\inffast.h" />
+    <ClInclude Include="Ric\inffixed.h" />
+    <ClInclude Include="Ric\inflate.h" />
+    <ClInclude Include="Ric\inftrees.h" />
+    <ClInclude Include="Ric\nemardr.h" />
+    <ClInclude Include="Ric\nifti1.h" />
+    <ClInclude Include="Ric\nifti1_io.h" />
+    <ClInclude Include="Ric\RicMatrix.h" />
+    <ClInclude Include="Ric\RicMesh.h" />
+    <ClInclude Include="Ric\RicMeshSet.h" />
+    <ClInclude Include="Ric\RicPoint.h" />
+    <ClInclude Include="Ric\RicTexture.h" />
+    <ClInclude Include="Ric\RicTextureSet.h" />
+    <ClInclude Include="Ric\RicUtil.h" />
+    <ClInclude Include="Ric\RicVolume.h" />
+    <ClInclude Include="Ric\RicVolumeSet.h" />
+    <ClInclude Include="Ric\trees.h" />
+    <ClInclude Include="Ric\zconf.h" />
+    <ClInclude Include="Ric\zconf.in.h" />
+    <ClInclude Include="Ric\zlib.h" />
+    <ClInclude Include="Ric\znzlib.h" />
+    <ClInclude Include="Ric\zutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\base.frag" />
+    <None Include="Shaders\base.vert" />
+    <None Include="Shaders\contour.frag" />
+    <None Include="Shaders\contour.vert" />
+    <None Include="Shaders\coord.frag" />
+    <None Include="Shaders\coord.vert" />
+    <None Include="Shaders\fisheye.frag" />
+    <None Include="Shaders\fisheye.vert" />
+    <None Include="Shaders\mesh.frag" />
+    <None Include="Shaders\mesh.vert" />
+    <None Include="Shaders\plane.frag" />
+    <None Include="Shaders\plane.vert" />
+    <None Include="Shaders\raycasting.frag" />
+    <None Include="Shaders\raycasting.vert" />
+    <None Include="Shaders\selVol.frag" />
+    <None Include="Shaders\selVol.vert" />
+    <None Include="shaders\simple.frag" />
+    <None Include="shaders\simple.vert" />
+    <None Include="Shaders\tracks.frag" />
+    <None Include="Shaders\tracks.vert" />
+    <None Include="Shaders\trackVol.frag" />
+    <None Include="Shaders\trackVol.vert" />
+    <None Include="Shaders\trackVol_pcwLinear.frag" />
+    <None Include="Shaders\tube.frag" />
+    <None Include="Shaders\tube.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
