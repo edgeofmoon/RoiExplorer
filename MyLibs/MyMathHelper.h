@@ -5,6 +5,7 @@
 #include "MyVec.h"
 #include "MyBox.h"
 #include "MyLine.h"
+#include "MyPolyLine.h"
 
 class MyMathHelper
 {
@@ -33,6 +34,8 @@ public:
 	static float ComputeStandardDeviationUnbiased(const MyArrayf* values, float mean);
 
 	static bool IsIntersected(const MyBox2f& box, const MyLine2f& line);
+
+	//static bool IsIntersected(const MyBox2f& box, const MyPolyline2f& polyline);
 
 	static float MinDistance(const MyLine2f& line, const MyVec2f& point);
 

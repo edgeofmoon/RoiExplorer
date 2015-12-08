@@ -194,10 +194,6 @@ void MyComponentFilter::CheckStatus(const MyComponent* root) const{
 				break;
 			}
 		}
-		int a = thisComponent->lastHi->hiEnd;
-		int b = thisComponent->nextHi->hiEnd;
-		int c = thisComponent->lastLo->hiEnd;
-		int d = thisComponent->nextLo->hiEnd;
 		numComponents++;
 	}
 }

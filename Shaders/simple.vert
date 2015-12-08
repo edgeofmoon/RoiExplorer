@@ -2,6 +2,7 @@
 
 uniform mat4x4 mvMat;
 uniform mat4x4 projMat;
+uniform vec4 color;
 uniform ivec4 name;
 
 in vec3 position;

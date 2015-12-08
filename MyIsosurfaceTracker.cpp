@@ -52,18 +52,16 @@ MyVec2i MyIsosurfaceTracker::FindIsoseeds(){
 	MyArray3i neighbors;
 	MyArrayMD<char, 3> visited(mVolumn->GetDimSizes(), 0);
 	MyVec2i seeds(mStartIndex, mStartIndex);
-	neighbors << mVolumn->ComputePosition(mStartIndex);
 	while (true){
-		MyVec3i current = neighbors.back();
-		int currentIdx = mVolumn->ComputeIndex(current);
-		float neighborValue = mVolumn->At(currentIdx);
+		seeds[0] = seeds[1];
+		MyVec3i current = mVolumn->ComputePosition(seeds[0]);
+		float neighborValue = mVolumn->At(seeds[1]);
 		float currentValue = neighborValue;
-		seeds = MyVec2i(currentIdx, currentIdx);
 		QueueJoinNeighbors(current, neighbors);
 		for (int i = 0; i < neighbors.size(); i++){
 			int nbrIndex = mVolumn->ComputeIndex(neighbors[i]);
 			float nbrValue = mVolumn->At(nbrIndex);
-			// if neighbor is better: i.e. going different direction
+			// if neighbor is better: i.e. going further
 			// grab it
 			if ((nbrValue - neighborValue)*sign < 0){
 				seeds[1] = nbrIndex;
@@ -71,9 +69,10 @@ MyVec2i MyIsosurfaceTracker::FindIsoseeds(){
 			}
 		}
 		if (CheckSeeds(currentValue, neighborValue)){
+			//cout << "Seed Values: " << currentValue << ", " << neighborValue << endl;
 			return seeds;
 		}
-		if (current[0] == current[1]){
+		if (seeds[0] == seeds[1]){
 			// no progress is made, abort
 			cout << "Cannot find seeds!" << endl;
 			return MyVec2i(-1, -1);
@@ -119,7 +118,7 @@ void MyIsosurfaceTracker::UnFlagSurface(const MyVec4i& surface){
 }
 
 bool MyIsosurfaceTracker::CheckSurfaceFlag(const MyVec4i& surface) const{
-	return mSurfaceVisit->operator[](surface.toDim<3>()) & (1 << surface[3]);
+	return (mSurfaceVisit->operator[](surface.toDim<3>()) & (1 << surface[3])) != 0;
 }
 
 void MyIsosurfaceTracker::SurfaceTracking(const MyVec2i& seeds){

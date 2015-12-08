@@ -26,6 +26,8 @@ public:
 	}
 	void Clear();
 	void AddSegmentNodeInfo(MySegmentNodeInfoScPtr segNodeInfo);
+	void RemoveSegmentNodeInfo(MySegmentNodeInfoScPtr segNodeInfo);
+	void RemoveSegmentNodeInfo(const MySegmentNode* segNode);
 	// sort and collect voxel mapped values
 	void Update();
 

@@ -1,5 +1,10 @@
 #include "MySegmentNode.h"
 
+// debug
+#include <iostream>
+using namespace std;
+
+int MySegmentNode::MaxIndex = -1;
 
 MySegmentNode::MySegmentNode()
 {
@@ -9,6 +14,7 @@ MySegmentNode::MySegmentNode()
 
 MySegmentNode::~MySegmentNode()
 {
+	//cout << "segment #" << mIndex << "is deleted.\n";
 }
 
 MySegmentNodeSPtr MySegmentNode::GetParent(int i){
@@ -89,6 +95,15 @@ MyVoxContainerfSPtr MySegmentNode::GetUniqueVoxes(){
 	return mUniqueVoxes;
 }
 
+void MySegmentNode::SetIndex(int index){ 
+	mIndex = index;
+	MaxIndex = std::max(index, MaxIndex);
+};
+
+void MySegmentNode::SetAutoIndex(){
+	mIndex = ++MaxIndex;
+}
+
 void MySegmentNode::UpdateVolumeSize(){
 	MyNode::TreeIterator treeItr = this->Begin();
 	while (!static_cast<const MySegmentNode*>(*treeItr)->HasUniqueVoxel()){
@@ -99,12 +114,17 @@ void MySegmentNode::UpdateVolumeSize(){
 
 // pre-increment
 MySegmentNode::VoxelIterator& MySegmentNode::VoxelIterator::operator++(){
-	if (mVoxelIterator != static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
-		++mVoxelIterator;
+	if (++mVoxelIterator != static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
 	}
-	else if (mTreeIterator != mRoot->End()){
-		++mTreeIterator;
-		mVoxelIterator = static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->Begin();
+	else {
+		MyNode::TreeIterator tmpItr = mTreeIterator;
+		while (++tmpItr != mRoot->End()){
+			if (static_cast<const MySegmentNode*>(*tmpItr)->HasUniqueVoxel()){
+				mTreeIterator = tmpItr;
+				mVoxelIterator = static_cast<MySegmentNode*>(*tmpItr)->GetUniqueVoxes()->Begin();
+				break;
+			}
+		}
 	}
 	return *this;
 }
@@ -112,24 +132,34 @@ MySegmentNode::VoxelIterator& MySegmentNode::VoxelIterator::operator++(){
 // post-increment
 MySegmentNode::VoxelIterator MySegmentNode::VoxelIterator::operator++(int){
 	MySegmentNode::VoxelIterator itr(*this);
-	if (mVoxelIterator != static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
-		++mVoxelIterator;
+	if (++mVoxelIterator != static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
 	}
-	else if (mTreeIterator != mRoot->End()){
-		++mTreeIterator;
-		mVoxelIterator = static_cast<MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->Begin();
+	else {
+		MyNode::TreeIterator tmpItr = mTreeIterator;
+		while (++tmpItr != mRoot->End()){
+			if (static_cast<const MySegmentNode*>(*tmpItr)->HasUniqueVoxel()){
+				mTreeIterator = tmpItr;
+				mVoxelIterator = static_cast<MySegmentNode*>(*tmpItr)->GetUniqueVoxes()->Begin();
+				break;
+			}
+		}
 	}
 	return itr;
 }
 
 // pre-increment
 MySegmentNode::const_VoxelIterator& MySegmentNode::const_VoxelIterator::operator++(){
-	if (mVoxelIterator != static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
-		++mVoxelIterator;
+	if (++mVoxelIterator != static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
 	}
-	else if (mTreeIterator != mRoot->End()){
-		++mTreeIterator;
-		mVoxelIterator = static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->Begin();
+	else {
+		MyNode::const_TreeIterator tmpItr = mTreeIterator;
+		while (++tmpItr != mRoot->End()){
+			if (static_cast<const MySegmentNode*>(*tmpItr)->HasUniqueVoxel()){
+				mTreeIterator = tmpItr;
+				mVoxelIterator = static_cast<const MySegmentNode*>(*tmpItr)->GetUniqueVoxes()->Begin();
+				break;
+			}
+		}
 	}
 	return *this;
 }
@@ -137,18 +167,23 @@ MySegmentNode::const_VoxelIterator& MySegmentNode::const_VoxelIterator::operator
 // post-increment
 MySegmentNode::const_VoxelIterator MySegmentNode::const_VoxelIterator::operator++(int){
 	MySegmentNode::const_VoxelIterator itr(*this);
-	if (mVoxelIterator != static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
-		++mVoxelIterator;
+	if (++mVoxelIterator != static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->End()){
 	}
-	else if (mTreeIterator != mRoot->End()){
-		++mTreeIterator;
-		mVoxelIterator = static_cast<const MySegmentNode*>(*mTreeIterator)->GetUniqueVoxes()->Begin();
+	else {
+		MyNode::const_TreeIterator tmpItr = mTreeIterator;
+		while (++tmpItr != mRoot->End()){
+			if (static_cast<const MySegmentNode*>(*tmpItr)->HasUniqueVoxel()){
+				mTreeIterator = tmpItr;
+				mVoxelIterator = static_cast<const MySegmentNode*>(*tmpItr)->GetUniqueVoxes()->Begin();
+				break;
+			}
+		}
 	}
 	return itr;
 }
 
-MySegmentNode::VoxelIterator MySegmentNode::VoxelBegin(){
-	TreeIterator treeItr = this->Begin(MyNode::Direction_In);
+MySegmentNode::VoxelIterator MySegmentNode::VoxelBegin(MyNode::Direction dir){
+	TreeIterator treeItr = this->Begin(dir);
 	while (!static_cast<MySegmentNode*>(*treeItr)->HasUniqueVoxel()){
 		treeItr++;
 	}
@@ -157,10 +192,10 @@ MySegmentNode::VoxelIterator MySegmentNode::VoxelBegin(){
 	return MySegmentNode::VoxelIterator(this, treeItr, voxelIterator);
 }
 
-MySegmentNode::VoxelIterator MySegmentNode::VoxelEnd(){
-	TreeIterator treeItr = this->Begin(MyNode::Direction_In);
-	TreeIterator treeItrTmp = this->Begin(MyNode::Direction_In);
-	while (treeItrTmp != this->End(MyNode::Direction_In)){
+MySegmentNode::VoxelIterator MySegmentNode::VoxelEnd(MyNode::Direction dir){
+	TreeIterator treeItr = this->Begin(dir);
+	TreeIterator treeItrTmp = this->Begin(dir);
+	while (treeItrTmp != this->End(dir)){
 		if (static_cast<const MySegmentNode*>(*treeItrTmp)->HasUniqueVoxel()){
 			treeItr = treeItrTmp;
 		}
@@ -170,8 +205,8 @@ MySegmentNode::VoxelIterator MySegmentNode::VoxelEnd(){
 		static_cast<MySegmentNode*>(*treeItr)->GetUniqueVoxes()->End();
 	return MySegmentNode::VoxelIterator(this, treeItr, voxelIterator);
 }
-MySegmentNode::const_VoxelIterator MySegmentNode::VoxelBegin() const{
-	const_TreeIterator treeItr = this->Begin(MyNode::Direction_In);
+MySegmentNode::const_VoxelIterator MySegmentNode::VoxelBegin(MyNode::Direction dir) const{
+	const_TreeIterator treeItr = this->Begin(dir);
 	while (!static_cast<const MySegmentNode*>(*treeItr)->HasUniqueVoxel()){
 		treeItr++;
 	}
@@ -179,10 +214,10 @@ MySegmentNode::const_VoxelIterator MySegmentNode::VoxelBegin() const{
 		static_cast<const MySegmentNode*>(*treeItr)->GetUniqueVoxes()->Begin();
 	return MySegmentNode::const_VoxelIterator(this, treeItr, voxelIterator);
 }
-MySegmentNode::const_VoxelIterator MySegmentNode::VoxelEnd() const{
-	const_TreeIterator treeItr = this->Begin(MyNode::Direction_In);
-	const_TreeIterator treeItrTmp = this->Begin(MyNode::Direction_In);
-	while (treeItrTmp != this->End(MyNode::Direction_In)){
+MySegmentNode::const_VoxelIterator MySegmentNode::VoxelEnd(MyNode::Direction dir) const{
+	const_TreeIterator treeItr = this->Begin(dir);
+	const_TreeIterator treeItrTmp = this->Begin(dir);
+	while (treeItrTmp != this->End(dir)){
 		if (static_cast<const MySegmentNode*>(*treeItrTmp)->HasUniqueVoxel()){
 			treeItr = treeItrTmp;
 		}

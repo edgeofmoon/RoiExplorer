@@ -21,7 +21,7 @@ void MyJoinTreeDrawer::Update(){
 	mLayout->SetJoinTreeRoot(mJoinTree->GetRoot());
 	mLayout->Update();
 }
-void MyJoinTreeDrawer::Render(int width, int height){
+void MyJoinTreeDrawer::Render(){
 	MyNode::const_TreeIterator itr = mJoinTree->GetRoot()->Begin();
 	MyNode::const_TreeIterator itrEnd = mJoinTree->GetRoot()->End();
 	glPushAttrib(GL_DEPTH_BITS | GL_COLOR_BUFFER_BIT);
@@ -59,18 +59,26 @@ void MyJoinTreeDrawer::RenderSegment(const MySegmentNode* segment){
 	glVertex3f(box.GetHighPos()[0], box.GetHighPos()[1], 0.5);
 	glVertex3f(box.GetLowPos()[0], box.GetHighPos()[1], 0.5);
 	glEnd();
+	glColor4f(1, 1, 1, 1);
+	glBegin(GL_QUADS);
+	glVertex3f(box.GetLowPos()[0], box.GetLowPos()[1], 0.1);
+	glVertex3f(box.GetHighPos()[0], box.GetLowPos()[1], 0.1);
+	glVertex3f(box.GetHighPos()[0], box.GetHighPos()[1], 0.1);
+	glVertex3f(box.GetLowPos()[0], box.GetHighPos()[1], 0.1);
+	glEnd();
 	//glRasterPos3f(box.GetHighPos()[0]+box.GetSize(0)*0.01, box.GetHighPos()[1], 0.7);
 	//glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)MyString(index).c_str());
 
+	glColor4f(0, 0, 0, 1);
 	if (segment->GetNumParents() > 0){
 		MyBox2f pbox = mLayout->GetPosition(segment->GetParent().get());
 		glBegin(GL_LINE_STRIP);
 		//glColor4f(1, 0, 0, 1);
-		glVertex2f((box.GetLowPos()[0] + box.GetHighPos()[0]) / 2, box.GetLowPos()[1]);
+		glVertex3f((box.GetLowPos()[0] + box.GetHighPos()[0]) / 2, box.GetLowPos()[1], 0.5);
 		//glColor4f(1, 1, 0, 1);
-		glVertex2f((box.GetLowPos()[0] + box.GetHighPos()[0]) / 2, pbox.GetHighPos()[1]);
+		glVertex3f((box.GetLowPos()[0] + box.GetHighPos()[0]) / 2, pbox.GetHighPos()[1], 0.5);
 		//glColor4f(0, 1, 0, 1);
-		glVertex2f((pbox.GetLowPos()[0] + pbox.GetHighPos()[0]) / 2, pbox.GetHighPos()[1]);
+		glVertex3f((pbox.GetLowPos()[0] + pbox.GetHighPos()[0]) / 2, pbox.GetHighPos()[1], 0.5);
 		glEnd();
 	}
 }

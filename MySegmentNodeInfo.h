@@ -10,12 +10,15 @@ public:
 	MySegmentNodeInfo();
 	~MySegmentNodeInfo();
 
+	// set recursive
+	void SetUseAllDescendentNode(bool ud){ mUseAllDescendents = ud; }
+
 	// set data
-	void SetSegmentNode(MySegmentNodeScPtr segNode){ mSegNode = segNode; };
+	void SetSegmentNode(MySegmentNodeSPtr segNode){ mSegNode = segNode; };
 	void SetVolumes(MyArrayScPtr<My3dArrayfScPtr> vols){ mVolumes = vols; };
 
 	// query data
-	MySegmentNodeScPtr GetSegmentNode() const { return mSegNode; };
+	MySegmentNodeSPtr GetSegmentNode() const { return mSegNode; };
 	MyArrayScPtr<My3dArrayfScPtr> GetVolumes() const { return mVolumes; };
 
 	// query statistics
@@ -29,7 +32,9 @@ public:
 	void Update();
 
 protected:
-	MySegmentNodeScPtr mSegNode;
+	bool mUseAllDescendents;
+
+	MySegmentNodeSPtr mSegNode;
 	MyArrayScPtr<My3dArrayfScPtr> mVolumes;
 
 	// compute segment average value

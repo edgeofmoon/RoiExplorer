@@ -1,8 +1,13 @@
 #include "MySegNodeInfoLayout2D.h"
 #include <algorithm>
 
+// debug
+#include <iostream>
+using namespace std;
+
 MySegNodeInfoLayout2D::MySegNodeInfoLayout2D()
 {
+	mBoxesOut = std::make_shared<MyMap<const MySegmentNode*, MyBox2f>>();
 }
 
 
@@ -80,12 +85,15 @@ void MySegNodeInfoLayout2D::Update(){
 }
 */
 
+/*
+// this one does not care about status
 void MySegNodeInfoLayout2D::Update(){
 	if (mSegAsmGroup->size() < 2){
-		mBoxesOut = std::make_shared<MyMap<const MySegmentNode*, MyBox2f>>();
+		mBoxesOut->clear();
 		// reassign layout
 		int numBoxes = mBoxesIn->size();
-		float boxSpace = 0.9f / numBoxes;
+		float boxSpace = 1.0f / numBoxes;
+		boxSpace = std::min(boxSpace, 0.1f);
 		// this 0.5 is a tmp hack
 		float boxWidth = boxSpace*0.5;
 		// evenly arrange from left to right
@@ -93,40 +101,115 @@ void MySegNodeInfoLayout2D::Update(){
 		for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = mBoxesIn->begin();
 			itr != mBoxesIn->end(); itr++){
 			// add small offset to avoid viewport clipping
-			float boxX = i++*boxSpace + 0.05f;
+			float boxX = i++*boxSpace + boxWidth / 2;
 			MyVec2f lowPos(boxX, 0.4);
 			MyVec2f highPos = lowPos + MyVec2f(boxWidth, 0.2f);
 			mBoxesOut->operator[](itr->first) = MyBox2f(lowPos, highPos);
 		}
 	}
 	else{
-		MyMap<float, const MySegmentNode*> segOrdered;
-		for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = mBoxesIn->begin();
-			itr != mBoxesIn->end(); itr++){
+		
+		class SegmentSort{
+		public:
+			SegmentSort(const MyMap<const MySegmentNode*, float>& sv)
+				:segValue(sv){};
+			bool operator()(const MySegmentNode* seg1, const MySegmentNode* seg2) const{
+				// its important to ensure fully ordered
+				// or std::map will merge
+				return fabs(segValue.at(seg1)) > fabs(segValue.at(seg2)) || seg1 > seg2;
+			}
+			const MyMap<const MySegmentNode*, float>& segValue;
+		};
+
+		SegmentSort segSort(mSegAsmGroup->GetTScores());
+
+		std::map<const MySegmentNode*, MyBox2f, SegmentSort> segOrdered(segSort);
+		for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itrBoxIn = mBoxesIn->begin();
+			itrBoxIn != mBoxesIn->end(); itrBoxIn++){
 			// add negativity to ensure reverse order
 			// absolution value of t score is important
-			segOrdered[-fabs(mSegAsmGroup->GetTScores().at(itr->first))] = itr->first;
+			segOrdered[itrBoxIn->first] = itrBoxIn->second;
 		}
 
-		mBoxesOut = std::make_shared<MyMap<const MySegmentNode*, MyBox2f>>();
+		mBoxesOut->clear();
 		// reassign layout
 		int numBoxes = mBoxesIn->size();
-		float boxSpace = 0.9f / numBoxes;
+		float boxSpace = 1.0f / numBoxes;
+		boxSpace = std::min(boxSpace, 0.1f);
 		// this 0.5 is a tmp hack
 		float boxWidth = boxSpace*0.5;
 		// evenly arrange from left to right
 		int i = 0;
-		for (MyMap<float, const MySegmentNode*>::const_iterator itr = segOrdered.begin();
+		for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = segOrdered.begin();
 			itr != segOrdered.end(); itr++){
 			// add small offset to avoid viewport clipping
-			float boxX = i++*boxSpace + 0.05f;
+			float boxX = i++*boxSpace + boxWidth / 2;
 			MyVec2f lowPos(boxX, 0.4);
 			MyVec2f highPos = lowPos + MyVec2f(boxWidth, 0.2f);
-			mBoxesOut->operator[](itr->second) = MyBox2f(lowPos, highPos);
+			mBoxesOut->operator[](itr->first) = MyBox2f(lowPos, highPos);
 		}
 	}
 }
+*/
+
+void MySegNodeInfoLayout2D::Update(){
+	class SegmentSort{
+	public:
+		SegmentSort(const MyMap<const MySegmentNode*, float>& sv)
+			:segValue(sv){};
+		bool operator()(const MySegmentNode* seg1, const MySegmentNode* seg2) const{
+			// its important to ensure fully ordered
+			// or std::map will merge
+			return fabs(segValue.at(seg1)) > fabs(segValue.at(seg2)) || seg1 > seg2;
+		}
+		const MyMap<const MySegmentNode*, float>& segValue;
+	};
+	SegmentSort segSort(mSegAsmGroup->GetTScores());
+	std::map<const MySegmentNode*, MyBox2f, SegmentSort> segOrdered(segSort);
+	for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itrBoxIn = mBoxesIn->begin();
+		itrBoxIn != mBoxesIn->end(); itrBoxIn++){
+		// add negativity to ensure reverse order
+		// absolution value of t score is important
+		segOrdered[itrBoxIn->first] = itrBoxIn->second;
+	}
+
+	mBoxesOut->clear();
+	// reassign layout
+	// totally ignore the encoding for now
+	int numBoxes = mBoxesIn->size();
+	MyVec2f currentOffset(0, 0);
+	float interval = 0.004;
+	for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = segOrdered.begin();
+		itr != segOrdered.end(); itr++){
+		MyBox2f box = this->ComputeBox(itr->first);
+		box += currentOffset;
+		currentOffset[0] += (box.GetSize(0) + interval);
+		mBoxesOut->operator[](itr->first) = box;
+		//cout << "Box width: " << box.GetSize(0) << endl;
+	}
+}
+
 
 bool MySegNodeInfoLayout2D::IsBoxLeft(const MyBox2f& box0, const MyBox2f& box1){
 	return box0.GetLowPos()[0] < box1.GetLowPos()[0];
+}
+
+MyBox2f MySegNodeInfoLayout2D::ComputeBox(const MySegmentNode* seg) const{
+	float boxWidth = 0.05;
+	if (mBoxStatus){
+		if (mBoxStatus->HasKey(seg)){
+			MyObjectStatus status = mBoxStatus->at(seg);
+			if (status.IsBitSet(MyObjectStatus::STATUS_DISABLE_BIT)){
+				boxWidth = 0.005;
+			}
+		}
+	}
+	float maxTScoreHeight = 0.2f;
+	MyVec2f tScoreRange = mSegAsmGroup->GetTScoreRange();
+	float tScoreRangeAbs = max(fabs(tScoreRange[0]), fabs(tScoreRange[1]));
+	float tScore = mSegAsmGroup->GetTScores().at(seg);
+	float tScoreHeight = fabs(tScore) / tScoreRangeAbs * maxTScoreHeight;
+	MyVec2f lowPos(0, 0.4);
+	MyVec2f highPos = lowPos + MyVec2f(boxWidth, 0.2f + tScoreHeight);
+	return MyBox2f(lowPos, highPos);
 }

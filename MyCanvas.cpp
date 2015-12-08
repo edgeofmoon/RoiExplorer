@@ -22,6 +22,7 @@ void MyCanvas::Clear(){
 
 void MyCanvas::On(){
 	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer.frameBuffer);
+	glViewport(0, 0, mFrameBuffer.width, mFrameBuffer.height);
 }
 
 void MyCanvas::Off(){
@@ -32,14 +33,17 @@ void MyCanvas::Off(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-MyVec4i MyCanvas::GetName(int x, int y){
+MyVec4i MyCanvas::GetName(const MyVec2i& pos) const{
 	if (mNameMap){
-		return mNameMap->At(MyVec2i(x, y));
+		return mNameMap->At(pos);
 	}
 	return MyVec4i(-1, -1, -1, -1);
 }
 
 void MyCanvas::Resize(int w, int h){
+	if (w == mFrameBuffer.width && h == mFrameBuffer.height){
+		return;
+	}
 	mFrameBuffer.width = w;
 	mFrameBuffer.height = h;
 	mNameMap = std::make_shared<MyArrayMD<MyVec4i, 2>>(MyVec2i(w, h));
@@ -107,6 +111,7 @@ void MyCanvas::Resize(int w, int h){
 
 void MyCanvas::Show(MyVec4i viewport){
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	MyGraphicsTool::EnableAlplaBlending();
 	MyGraphicsTool::SetViewport(viewport);
 	MyGraphicsTool::PushProjectionMatrix();
 	MyGraphicsTool::PushMatrix();

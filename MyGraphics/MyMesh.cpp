@@ -115,6 +115,17 @@ int MyMesh::GetNumTriangle() const{
 	return mTriangles.size();
 }
 
+const MyArray3f& MyMesh::GetVertices() const{
+	return mVertices;
+}
+
+const MyArray3f& MyMesh::GetNormals() const{
+	return mNormals;
+}
+
+const MyArray3i& MyMesh::GetTriangles() const{
+	return mTriangles;
+}
 
 const float* MyMesh::GetVertexData() const{
 	return &mVertices[0][0];

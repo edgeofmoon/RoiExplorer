@@ -207,6 +207,10 @@ MyArrayiSPtr MyVoxContainer<valueType>::MakeIndexArray() const{
 
 /************************ Start Large ***********************************/
 template<typename valueType>
+MyVoxContainer_Large<valueType>::~MyVoxContainer_Large(){
+}
+
+template<typename valueType>
 MyArrayMDSPtr <valueType, 3> MyVoxContainer_Large<valueType>::MakeVolume() const{
 	return std::make_shared< MyArrayMD <valueType, 3>>(mVolumeMask);
 }
@@ -334,6 +338,9 @@ MyVoxContainer_Large<valueType>::End() const{
 
 /************************ Start Small ***********************************/
 
+template<typename valueType>
+MyVoxContainer_Small<valueType>::~MyVoxContainer_Small(){
+}
 
 template<typename valueType>
 void MyVoxContainer_Small<valueType>::Clear(){
@@ -456,6 +463,10 @@ MyVoxContainer_Small<valueType>::End() const{
 }
 
 /********************** Start Tiny ***************************/
+
+template<typename valueType>
+MyVoxContainer_Tiny<valueType>::~MyVoxContainer_Tiny(){
+}
 
 template<typename valueType>
 void MyVoxContainer_Tiny<valueType>::Clear(){

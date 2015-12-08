@@ -5,6 +5,10 @@ namespace ColorScaleTable{
 
 	extern unsigned char colorBrewer_sequential_8_multihue_9[8][3];
 
+	extern float DivergingColorMap[257][3];
+
+	void DivergingColor(float diff, float minDiff, float maxDiff, float color_rgba[4]);
+
 	void DiffValueToColor(float diff, float minDiff, float maxDiff, float color_rgba[4]);
 
 	void SequentialColor(float value, float minValue, float maxValue, float color_rgba[4]);

@@ -12,7 +12,10 @@ class MyPolyline
 public:
 	MyPolyline();
 	MyPolyline(const MyArray<MyVec<T,n>>& ctlPoints);
-	~MyPolyline(){};
+	virtual ~MyPolyline(){};
+
+	void Clear();
+	void Append(const MyVec<T, n>& point);
 
 	void SetLine(const MyArray<MyVec<T,n>>& ctlPoints);
 	void SetLoop(bool loop = true);
@@ -32,6 +35,7 @@ public:
 
 	bool IsPointIn(const MyVec<T,2>& p) const;
 
+
 protected:
 	bool mLoop;
 };
@@ -48,6 +52,20 @@ MyPolyline<T,n>::MyPolyline(const MyArray<MyVec<T,n>>& ctlPoints){
 	this->UpdateBoundingBox();
 }
 
+template<typename T, int n>
+void MyPolyline<T, n>::Clear(){
+	mVertices.clear();
+	mBoundingBox.Set(MyVec<T, n>::zero(), MyVec<T, n>::zero());
+}
+
+template<typename T, int n>
+void MyPolyline<T, n>::Append(const MyVec<T, n>& point){
+	mVertices << point;
+	if (mVertices.size() == 1){
+		this->UpdateBoundingBox();
+	}
+	else mBoundingBox.Engulf(point);
+}
 
 template<typename T, int n>
 void MyPolyline<T,n>::SetLine(const MyArray<MyVec<T,n>>& ctlPoints){

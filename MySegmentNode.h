@@ -13,7 +13,7 @@ class MySegmentNode
 {
 public:
 	MySegmentNode();
-	~MySegmentNode();
+	virtual ~MySegmentNode();
 
 	MySegmentNodeSPtr GetParent(int i = 0);
 	MySegmentNodeScPtr GetParent(int i = 0) const;
@@ -38,12 +38,15 @@ public:
 	int GetNumTotalVoxes() const{
 		return mTotalVoxels;
 	};
-	void SetIndex(int index){ mIndex = index; };
+	void SetIndex(int index);
+	void SetAutoIndex();
 	int GetIndex() const{ return mIndex; };
 
 protected:
 	MyVoxContainerfSPtr mUniqueVoxes;
 	int mIndex;
+
+	static int MaxIndex;
 
 	int mTotalVoxels;
 	MyVec3i mVolumeSize;
@@ -54,9 +57,12 @@ protected:
 
 	/**************** Iterator Definition *******************/
 public:
+	class VoxelIterator;
+	class const_VoxelIterator;
 	class VoxelIterator
 		: public std::iterator < std::forward_iterator_tag, float >{
 	public:
+		friend const_VoxelIterator;
 		VoxelIterator(MySegmentNode* root,
 			MyNode::TreeIterator treeItr,
 			MyVoxContainerf::Iterator voxelItr)
@@ -107,6 +113,10 @@ public:
 			:mRoot(root),
 			mTreeIterator(treeItr),
 			mVoxelIterator(voxelItr) {};
+		const_VoxelIterator(const VoxelIterator& itr)
+			:mRoot(itr.mRoot),
+			mTreeIterator(itr.mTreeIterator),
+			mVoxelIterator(itr.mVoxelIterator) {};
 		// Operators : misc
 		inline const float& operator*() const {
 			return *mVoxelIterator;
@@ -140,10 +150,10 @@ public:
 	};
 
 public:
-	VoxelIterator VoxelBegin();
-	VoxelIterator VoxelEnd();
-	const_VoxelIterator VoxelBegin() const;
-	const_VoxelIterator VoxelEnd() const;
+	VoxelIterator VoxelBegin(MyNode::Direction dir = MyNode::Direction_Out);
+	VoxelIterator VoxelEnd(MyNode::Direction dir = MyNode::Direction_Out);
+	const_VoxelIterator VoxelBegin(MyNode::Direction dir = MyNode::Direction_Out) const;
+	const_VoxelIterator VoxelEnd(MyNode::Direction dir = MyNode::Direction_Out) const;
 
 };
 

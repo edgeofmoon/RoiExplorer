@@ -15,6 +15,7 @@ MySegsPlanarDrawer::MySegsPlanarDrawer()
 
 MySegsPlanarDrawer::~MySegsPlanarDrawer()
 {
+	DestoryGeometry();
 }
 
 void MySegsPlanarDrawer::SetLabels(MyMapScPtr<int, MyString> labels){
@@ -22,20 +23,16 @@ void MySegsPlanarDrawer::SetLabels(MyMapScPtr<int, MyString> labels){
 }
 
 void MySegsPlanarDrawer::Update(){
-	//MyMapScPtr<const MySegmentNode*, MyBox2f> boxes
-	//	= mSegNodeInfoAssembles.front()->GetSegment2DBoxes();
-	//mLayoutManager->SetBoxesIn(boxes);
-	//mLayoutManager->Update();
 	MyMapScPtr<const MySegmentNode*, MyBox2f> boxesOut = mLayoutManager->GetBoxesOut();
-	MyMapSPtr<int, MyBox2f> objBoxes = std::make_shared<MyMap<int, MyBox2f>>();
 	mLabelManager->SetBoxes(boxesOut);
 	mLabelManager->Update();
 
 	// use shader
+	DestoryGeometry();
 	LoadGeometry();
 }
 
-void MySegsPlanarDrawer::Render(int winWidth, int winHeight){
+void MySegsPlanarDrawer::Render(){
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -54,6 +51,7 @@ void MySegsPlanarDrawer::Render(int winWidth, int winHeight){
 	glUniformMatrix4fv(projmatLocation, 1, GL_FALSE, projMat);
 
 	glBindVertexArray(mVertexArray);
+	//cout << "Roi Renderer: " << mVertices.size() << ", " << numBoxes << endl;
 	for (int iStart = 0; iStart <(mVertices.size() - numBoxes * 4) * sizeof(int); iStart += 200 * sizeof(int)){
 		glDrawElements(GL_QUAD_STRIP, 200, GL_UNSIGNED_INT, (const void *)iStart);
 	}
@@ -62,14 +60,14 @@ void MySegsPlanarDrawer::Render(int winWidth, int winHeight){
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_ALWAYS);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_ALWAYS);
 	DrawBoundary();
 	for (int i = 0; i < mSegAssembleGroup->size(); i++){
 		DrawDistribution(i);
 	}
 	glPopAttrib();
-	mLabelManager->Render(winWidth, winHeight);
+	mLabelManager->Render();
 }
 
 void MySegsPlanarDrawer::Resize(int width, int height){
@@ -97,14 +95,14 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 	MyVec3f dir3 = dir.toDim<3>(0);
 	MyVec3f up(0, 0, 1);
 	MyVec3f radDir = dir3^up;
-	float offsetAlpha = 0.4;
-	float offsetBeta = 0.25 / offsetAlpha;
+	float offsetAlpha = 0.4f;
+	float offsetBeta = 0.25f / offsetAlpha;
 	float radius = length * (offsetBeta+offsetAlpha)/2;
 	MyVec3f center = midWay.toDim<3>(0) + radDir*(offsetBeta*length-radius);
 	float startAngle = atan2(fromPos[1] - center[1], fromPos[0] - center[0]);
 	float endAngle = atan2(toPos[1] - center[1], toPos[0] - center[0]);
-	if (abs(endAngle + 2 * 3.1415926 - startAngle) < abs(endAngle - startAngle)){
-		endAngle += 2 * 3.1415926;
+	if (abs(endAngle + 2 * 3.1415926f - startAngle) < abs(endAngle - startAngle)){
+		endAngle += 2 * 3.1415926f;
 	}
 	int numStep = 100;
 	float delAngle = (endAngle - startAngle) / numStep;
@@ -186,47 +184,50 @@ void MySegsPlanarDrawer::LoadGeometry(){
 		itr++;
 	}
 
-	if (glIsVertexArray(mVertexArray)){
-		glDeleteVertexArrays(1, &mVertexArray);
-	}
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
 	// vertex
-	if (glIsBuffer(mPositionBuffer)){
-		glDeleteBuffers(1, &mPositionBuffer);
-	}
 	glGenBuffers(1, &mPositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mPositionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(MyVec2f), &mVertices[0][0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(mPositionAttribute);
 	glVertexAttribPointer(mPositionAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	// color
-	if (glIsBuffer(mColorBuffer)){
-		glDeleteBuffers(1, &mColorBuffer);
-	}
 	glGenBuffers(1, &mColorBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mColorBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mColors.size() * sizeof(MyVec4f), &mColors[0][0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(mColorAttribute);
 	glVertexAttribPointer(mColorAttribute, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	// name
-	if (glIsBuffer(mNameBuffer)){
-		glDeleteBuffers(1, &mNameBuffer);
-	}
 	glGenBuffers(1, &mNameBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mNameBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mNames.size() * sizeof(MyVec4i), &mNames[0][0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(mNameAttribute);
 	glVertexAttribIPointer(mNameAttribute, 4, GL_INT, 0, 0);
 
-	if (glIsBuffer(mIndexBuffer)){
-		glDeleteBuffers(1, &mIndexBuffer);
-	}
 	glGenBuffers(1, &mIndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
 	MyArrayi index = MyArrayi::GetSequence(0, mVertices.size() - 1);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(int), &index[0], GL_STATIC_DRAW);
 	glBindVertexArray(0);
+}
+
+void MySegsPlanarDrawer::DestoryGeometry(){
+	if (glIsVertexArray(mVertexArray)){
+		glDeleteVertexArrays(1, &mVertexArray);
+	}
+	if (glIsBuffer(mPositionBuffer)){
+		glDeleteBuffers(1, &mPositionBuffer);
+	}
+	if (glIsBuffer(mColorBuffer)){
+		glDeleteBuffers(1, &mColorBuffer);
+	}
+	if (glIsBuffer(mNameBuffer)){
+		glDeleteBuffers(1, &mNameBuffer);
+	}
+	if (glIsBuffer(mIndexBuffer)){
+		glDeleteBuffers(1, &mIndexBuffer);
+	}
 }
 
 void MySegsPlanarDrawer::DrawBoundary(){
@@ -269,7 +270,7 @@ void MySegsPlanarDrawer::DrawBoundary(){
 		}
 	}
 	glPopAttrib();
-	glColor4f(0, 0, 0, 0.8);
+	glColor4f(0, 0, 0, 0.8f);
 	MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = boxes->begin();
 	while (itr != boxes->end()){
 		const MyBox2f &box = itr->second;
@@ -297,14 +298,14 @@ void MySegsPlanarDrawer::DrawArrowBoundary(const MyVec2f fromPos, const MyVec2f 
 	MyVec3f dir3 = dir.toDim<3>(0);
 	MyVec3f up(0, 0, 1);
 	MyVec3f radDir = dir3^up;
-	float offsetAlpha = 0.4;
-	float offsetBeta = 0.25 / offsetAlpha;
+	float offsetAlpha = 0.4f;
+	float offsetBeta = 0.25f / offsetAlpha;
 	float radius = length * (offsetBeta + offsetAlpha) / 2;
 	MyVec3f center = midWay.toDim<3>(0) + radDir*(offsetBeta*length - radius);
 	float startAngle = atan2(fromPos[1] - center[1], fromPos[0] - center[0]);
 	float endAngle = atan2(toPos[1] - center[1], toPos[0] - center[0]);
-	if (abs(endAngle + 2 * 3.1415926 - startAngle) < abs(endAngle - startAngle)){
-		endAngle += 2 * 3.1415926;
+	if (abs(endAngle + 2 * 3.1415926f - startAngle) < abs(endAngle - startAngle)){
+		endAngle += 2 * 3.1415926f;
 	}
 	int numStep = 100;
 	float delAngle = (endAngle - startAngle) / numStep;
@@ -334,6 +335,9 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 	int steps = 20;
 	//ColorScaleTable::CategoricalColor(idx, 0, mSegNodeInfoAssembles.size() - 1, color);
 	//glColor4fv(color);
+	float minStd = mSegAssembleGroup->GetStdevRange()[0];
+	MyVec2f gRange = mSegAssembleGroup->GetThreeSigmaRange();
+	float ggRange = gRange[1] - gRange[0];
 	glColor4f(0, 0, 0, 1);
 	MyArrayScPtr<MySegmentNodeInfoScPtr> segNodeInfos 
 		= mSegAssembleGroup->at(idx)->GetSegmentNodeInfos();
@@ -349,8 +353,9 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		glBegin(GL_LINE_LOOP);
 		for (int ic = -steps; ic <= steps; ic++){
 			float diff = ic / (float)steps * 3;
-			float height = exp(-diff*diff)*maxHeight;
-			glVertex2f(base[0] + height, base[1] + (diff*stdev + mean)*maxWidth);
+			float height = exp(-diff*diff)*maxHeight *(minStd / stdev);
+			glVertex3f(base[0] + height,
+				base[1] + (diff*stdev + mean - gRange[0]) / ggRange*maxWidth, 0.6);
 		}
 		glEnd();
 	}
@@ -367,9 +372,11 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		glBegin(GL_QUAD_STRIP);
 		for (int ic = -steps; ic <= steps; ic++){
 			float diff = ic / (float)steps * 3;
-			float height = exp(-diff*diff)*maxHeight;
-			glVertex2f(base[0] , base[1] + (diff*stdev + mean)*maxWidth);
-			glVertex2f(base[0] + height, base[1] + (diff*stdev + mean)*maxWidth);
+			float height = exp(-diff*diff)*maxHeight *(minStd / stdev);
+			glVertex3f(base[0], 
+				base[1] + (diff*stdev + mean - gRange[0]) / ggRange*maxWidth, 0.6);
+			glVertex3f(base[0] + height, 
+				base[1] + (diff*stdev + mean - gRange[0]) / ggRange*maxWidth, 0.6);
 		}
 		glEnd();
 	}
@@ -383,9 +390,15 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		float maxWidth = boxes->at(node).GetSize(1);
 		glColor4f(0, 0, 0, 0.5);
 		glRasterPos2f(base[0] - maxHeight / 2, base[1]);
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '0');
+		//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '0');
+		MyString lowRange(gRange[0]);
+		lowRange.resize(4);
+		glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)lowRange.c_str());
 		glRasterPos2f(base[0] - maxHeight / 2, base[1] + maxWidth);
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '1');
+		//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, '1');
+		MyString highRange(gRange[1]);
+		highRange.resize(3);
+		glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)highRange.c_str());
 		float tScore = mSegAssembleGroup->GetTScores().at(node);
 		MyString tStr(tScore);
 		tStr.resize(4);

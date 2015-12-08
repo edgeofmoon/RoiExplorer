@@ -63,7 +63,7 @@ MySegNodeInfoAssembleSPtr MyDataReader::ConstructAssembleFromDirectory(const cha
 	const MyArray<MySegmentNodeSPtr>* ROIs){
 	MySegNodeInfoAssembleSPtr segAsmb = std::make_shared<MySegNodeInfoAssemble>();
 	MyArraySPtr<My3dArrayfScPtr> vols = std::make_shared<MyArray<My3dArrayfScPtr>>();
-	vector<string> skeletonfiles = get_all_files_names_within_folder(folderStr);
+	vector<string> skeletonfiles = OSCB::get_all_files_names_within_folder(folderStr);
 	for (int i = 0; i < skeletonfiles.size(); i++){
 		My3dArrayfSPtr ske = MyDataReader::LoadVolumeFromFile((folderStr + skeletonfiles[i]).c_str());
 		vols->PushBack(ske);

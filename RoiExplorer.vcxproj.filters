@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Legacy">
       <UniqueIdentifier>{36794828-0690-4673-a58f-cec487931948}</UniqueIdentifier>
     </Filter>
@@ -52,11 +48,23 @@
     <Filter Include="Source Files\Segments">
       <UniqueIdentifier>{57ea327d-dac0-4f0e-98f7-72bb377488e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Renderers">
+      <UniqueIdentifier>{c54ba732-8130-4394-b7ff-d77eaf1adf76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderers">
+      <UniqueIdentifier>{4e6d4677-9639-4f49-adaf-d001a0326705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Others">
+      <UniqueIdentifier>{ecf26549-ae8a-42b6-ae18-3e7f2004409e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Testers">
+      <UniqueIdentifier>{4f1793fa-d763-497d-814d-b8a73f4338dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Others">
+      <UniqueIdentifier>{c8b50531-8131-4755-afd0-6c30d5ee6eaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyLibs\MyString.cpp">
       <Filter>Legacy\MyLibs</Filter>
     </ClCompile>
@@ -112,9 +120,6 @@
       <Filter>Legacy\MyGraphics</Filter>
     </ClCompile>
     <ClCompile Include="MyGraphics\MyImage.cpp">
-      <Filter>Legacy\MyGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGraphics\MyMesh.cpp">
       <Filter>Legacy\MyGraphics</Filter>
     </ClCompile>
     <ClCompile Include="MyGraphics\MyPrimitiveDrawer.cpp">
@@ -207,15 +212,6 @@
     <ClCompile Include="MyLibs\MyBoundingBox.cpp">
       <Filter>Legacy\MyLibs</Filter>
     </ClCompile>
-    <ClCompile Include="MyLibs\MyMathHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyUiPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MySpaceFillingNaive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyContourTree\MyContourTree.cpp">
       <Filter>Legacy\MyContourTree</Filter>
     </ClCompile>
@@ -237,77 +233,14 @@
     <ClCompile Include="MyContourTree\MyContourTree_VolumeRendering.cpp">
       <Filter>Legacy\MyContourTree</Filter>
     </ClCompile>
-    <ClCompile Include="ColorScaleTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyBitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyDataReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyLibs\MyTimer.cpp">
       <Filter>Legacy\MyLibs</Filter>
-    </ClCompile>
-    <ClCompile Include="testSegmenter.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyLibs\svd.c">
       <Filter>Legacy\MyLibs</Filter>
     </ClCompile>
-    <ClCompile Include="testSegsVolRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTracks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyLabelManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyCanvas.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyLibs\OSCB.cpp">
       <Filter>Legacy\MyLibs</Filter>
-    </ClCompile>
-    <ClCompile Include="MyCohortPlot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyDistanceLayout2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="testJoinTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyOrderedList.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGridMD.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyBloomDrawingHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="testBloomDrawing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="testMultiCohorts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyLineConnectorDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyIsosurfaceTracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="testIsosurfaceTracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MySurfaceRenderer.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyVoxContainer.h">
       <Filter>Header Files\Segments</Filter>
@@ -319,9 +252,6 @@
       <Filter>Source Files\BubbleSets</Filter>
     </ClCompile>
     <ClCompile Include="MyJoinTree.cpp">
-      <Filter>Source Files\ContourTree</Filter>
-    </ClCompile>
-    <ClCompile Include="MyJoinTreeDrawer.cpp">
       <Filter>Source Files\ContourTree</Filter>
     </ClCompile>
     <ClCompile Include="MyJoinTreeLayout.cpp">
@@ -357,15 +287,6 @@
     <ClCompile Include="MySegNodeInfoLayout2D.cpp">
       <Filter>Source Files\Segments</Filter>
     </ClCompile>
-    <ClCompile Include="MySegsPlanarDrawer.cpp">
-      <Filter>Source Files\Segments</Filter>
-    </ClCompile>
-    <ClCompile Include="MySegsPlanarDrawer_old.cpp">
-      <Filter>Source Files\Segments</Filter>
-    </ClCompile>
-    <ClCompile Include="MySegsVolRenderer.cpp">
-      <Filter>Source Files\Segments</Filter>
-    </ClCompile>
     <ClCompile Include="MySegTrkNetwork.cpp">
       <Filter>Source Files\Segments</Filter>
     </ClCompile>
@@ -384,6 +305,168 @@
     <ClCompile Include="MyComponentFilter.cpp">
       <Filter>Source Files\ContourTree</Filter>
     </ClCompile>
+    <ClCompile Include="MyBloomDrawingHelper.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCanvas.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyIsosurfaceTracker.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLineConnectorDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySurfaceRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsVolRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsPlanarDrawer_old.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGridMD.h">
+      <Filter>Header Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyOrderedList.h">
+      <Filter>Header Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="testBloomDrawing.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testIsosurfaceTracker.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testJoinTree.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testMultiCohorts.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testSegmenter.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testSegsVolRenderer.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorScaleTable.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBitmap.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCohortPlot.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDataReader.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDistanceLayout2D.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLabelManager.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\MyMathHelper.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyNode.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MySpaceFillingNaive.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTracks.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyUiPanel.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMultiViewLayout.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyView.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySpatialView.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRoiView.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyConnectorView.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTreeView.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp_base.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp_init.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp_interactions.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="testVoxelIterator.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp_utilities.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="testMakeVoxel.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testApp.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGraphics\MyMesh.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyJoinTreeDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRoiStatisticsDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsPlanarDrawer_old_2.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MySegsPlannarDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\Example.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="testSignalAndSlot.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp_slots.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibs\SimpleFreeType.cpp">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="testFreeType.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="testFreeType2.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFont.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="testFont.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLabelManager_old.cpp">
+      <Filter>Source Files\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyLibs\MyArray.h">
@@ -394,9 +477,6 @@
     </ClInclude>
     <ClInclude Include="MyLibs\MyVec.h">
       <Filter>Legacy\MyLibs</Filter>
-    </ClInclude>
-    <ClInclude Include="MyLibs\MyBox.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyLibs\MyMap.h">
       <Filter>Legacy\MyLibs</Filter>
@@ -446,9 +526,6 @@
     <ClInclude Include="MyGraphics\MyLine.h">
       <Filter>Legacy\MyGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="MyGraphics\MyMesh.h">
-      <Filter>Legacy\MyGraphics</Filter>
-    </ClInclude>
     <ClInclude Include="MyGraphics\MyPolyLine.h">
       <Filter>Legacy\MyGraphics</Filter>
     </ClInclude>
@@ -463,9 +540,6 @@
     </ClInclude>
     <ClInclude Include="MyGraphics\Shader.h">
       <Filter>Legacy\MyGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGLHeader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyLibs\MyMatrix.h">
       <Filter>Legacy\MyLibs</Filter>
@@ -551,29 +625,8 @@
     <ClInclude Include="MyLibs\MyBoundingBox.h">
       <Filter>Legacy\MyLibs</Filter>
     </ClInclude>
-    <ClInclude Include="MyLibs\MyUtility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyLibs\MyMathHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyUiPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MySpaceFillingNaive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyContourTree\MyContourTree.h">
       <Filter>Legacy\MyContourTree</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorScaleTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyBitmap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyDataReader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyLibs\MyTimer.h">
       <Filter>Legacy\MyLibs</Filter>
@@ -581,53 +634,11 @@
     <ClInclude Include="MyLibs\svd.h">
       <Filter>Legacy\MyLibs</Filter>
     </ClInclude>
-    <ClInclude Include="MySharedPointer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTracks.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyLabelManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyCanvas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyLibs\dirent.h">
       <Filter>Legacy\MyLibs</Filter>
     </ClInclude>
     <ClInclude Include="MyLibs\OSCB.h">
       <Filter>Legacy\MyLibs</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVolumnSimilarity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyCohortPlot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyDistanceLayout2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyOrderedList_header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGridMD_header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyBloomDrawingHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyLineConnectorDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyIsosurfaceTracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MySurfaceRenderer.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyMarchingSquares.h">
       <Filter>Header Files\BubbleSets</Filter>
@@ -692,14 +703,128 @@
     <ClInclude Include="MySegTrkNetwork.h">
       <Filter>Header Files\Segments</Filter>
     </ClInclude>
-    <ClInclude Include="MySegsPlanarDrawer.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegsVolRenderer.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
     <ClInclude Include="MySegmentAssembleGroup.h">
       <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLineConnectorDrawer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MySurfaceRenderer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBloomDrawingHelper.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyIsosurfaceTracker.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCanvas.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegsVolRenderer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorScaleTable.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBitmap.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyBox.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCohortPlot.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDataReader.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDistanceLayout2D.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGLHeader.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGridMD_header.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLabelManager.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyMathHelper.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyNode.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyOrderedList_header.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MySharedPointer.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MySpaceFillingNaive.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTracks.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyUiPanel.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\MyUtility.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumnSimilarity.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMultiViewLayout.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyView.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MySpatialView.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyApp.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRoiView.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyConnectorView.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyJoinTreeView.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGraphics\MyMesh.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRoiStatisticsDrawer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyObjectStatus.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegsPlanarDrawer_old_2.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegsPlanarDrawer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\SimpleSignal.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\SimpleDelegate.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibs\SimpleFreeType.h">
+      <Filter>Legacy\MyLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFont.h">
+      <Filter>Header Files\Others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

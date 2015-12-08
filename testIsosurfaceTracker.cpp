@@ -38,7 +38,7 @@ void myGlutDisplay(){
 	glPushMatrix(); {
 		MyGraphicsTool::LoadTrackBall(&trackBall);
 		MyGraphicsTool::Translate(-tracker.GetBoundingBox().GetCenter());
-		surfaceRender.Render(GlobalViewport[2], GlobalViewport[3]);
+		surfaceRender.Render();
 	}glPopMatrix();
 
 	canvas.Off();
@@ -74,7 +74,7 @@ void myGlutKeyboard(unsigned char key, int x, int y){
 	case 'r':
 	case 'R':
 		int startIdx = vol->GetVolume() / 2;
-		isoValue += 0.025;
+		isoValue += 0.025f;
 		while (vol->At(++startIdx) < isoValue);
 		tracker.SetStartIndex(startIdx);
 		tracker.SetIsovalue(isoValue);
@@ -90,6 +90,9 @@ void myGlutKeyboard(unsigned char key, int x, int y){
 void myGlutMouse(int button, int state, int x, int y){
 	if (state == GLUT_DOWN){
 		trackBall.StartMotion(x, y);
+		MyVec4i name = canvas.GetName(MyVec2i(x, GlobalViewport[3] - y));
+		cout << "Name: " << name[0] << ", " << name[1]
+			<< ", " << name[2] << ", " << name[3] << endl;
 	}
 	else{
 		trackBall.EndMotion(x, y);
@@ -124,10 +127,13 @@ int main(int argc, char* argv[]){
 	int startIdx = vol->GetVolume() / 2;
 	while (vol->At(++startIdx) < isoValue);
 	tracker.SetStartIndex(startIdx);
+	//tracker.SetStartIndex(3310852);
+	//tracker.SetIsovalue(0.650468);
 	tracker.SetIsovalue(isoValue);
 	tracker.Update();
 	surfaceRender.SetGeometry(tracker.GetVertices().get(), 
 		tracker.GetNormals().get(), tracker.GetTriangles().get());
+	surfaceRender.SetName(MyVec4i(1, 2, 3, 4));
 	surfaceRender.Update();
 
 	glEnable(GL_DEPTH_TEST);

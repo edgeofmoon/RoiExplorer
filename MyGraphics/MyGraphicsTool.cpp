@@ -463,14 +463,14 @@ void MyGraphicsTool::DisableTexture2D(){
 	glDisable(GL_TEXTURE_2D);
 }
 bool MyGraphicsTool::IsTexture(int tex){
-	return glIsTexture(tex);
+	return glIsTexture(tex) == GL_TRUE;
 }
 
 MyArrayi MyGraphicsTool::GenerateTextures(int n){
 	int* ids = new int[n];
 	glGenTextures(n, (GLuint*)ids);
 	MyArrayi rst(n);
-	for(unsigned int i = 0;i<n;i++){
+	for(int i = 0;i<n;i++){
 		rst[i] = ids[i];
 	}
 	delete ids;

@@ -207,6 +207,20 @@ bool MyMathHelper::IsIntersected(const MyBox2f& box, const MyLine2f& line){
 	}
 }
 
+/*
+bool MyMathHelper::IsIntersected(const MyBox2f& box, const MyPolyline2f& polyline){
+	if (!polyline.GetBoundingBox().IsIntersected(box)){
+		return false;
+	}
+	for (int i = 0; i<polyline.GetNumLineSegments(); i++){
+		if (MyMathHelper::IsIntersected(box, polyline.GetLineSegment(i))){
+			return true;
+		}
+	}
+	return false;
+}
+*/
+
 float MyMathHelper::MinDistance(const MyLine2f& line, const MyVec2f& pt){
 	/*
 	// source: 

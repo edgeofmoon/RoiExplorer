@@ -2,6 +2,7 @@
 
 #include "MyJoinTreeLayout.h"
 #include "MySegmentNodeMatchCounter.h"
+#include "MySharedPointer.h"
 
 class MyBloomDrawingHelper
 {
@@ -10,7 +11,7 @@ public:
 	~MyBloomDrawingHelper();
 
 	void Update();
-	void Render(int width, int height);
+	void Render();
 
 	void SetLayout(MyJoinTreeLayoutScPtr layout){
 		mLayout = layout;
@@ -33,3 +34,5 @@ protected:
 	MyBox2f CutBox(const MyBox2f& box, float startRatio, float endRatio) const;
 };
 
+typedef MySharedPointer<MyBloomDrawingHelper> MyBloomDrawingHelperSPtr;
+typedef MySharedPointer<const MyBloomDrawingHelper> MyBloomDrawingHelperScPtr;

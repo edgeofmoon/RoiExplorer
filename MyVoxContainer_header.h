@@ -21,7 +21,7 @@ protected:
 	static valueType NullVoxelValue;
 public:
 	MyVoxContainer(const MyVec3i& volSize);
-	~MyVoxContainer();
+	virtual ~MyVoxContainer();
 
 	enum ContainerType{
 		ContainerType_NONE = 0,
@@ -202,6 +202,8 @@ public:
 		const_Iterator() : mIndex(-1), mContainer(nullptr) {};
 		const_Iterator(int idx, const MyVoxContainer<valueType>* container)
 			: mIndex(idx), mContainer(container) {};
+		const_Iterator(const Iterator& itr)
+			: mIndex(itr.mIndex), mContainer(itr.mContainer) {};
 
 		friend MyVoxContainer < valueType >;
 		// Operators : misc
@@ -340,8 +342,9 @@ public:
 	MyVoxContainer_Large(const MyVec3i& volBox, valueType value)
 		:MyVoxContainer(volBox),
 		mVolumeMask(volBox, value),
-		mNumVoxes(value == 0 ? 0 : My3dArrayf::ComputeVolume(volBox)){
+		mNumVoxes(value == NullVoxelValue ? 0 : My3dArrayf::ComputeVolume(volBox)){
 	};
+	virtual ~MyVoxContainer_Large();
 
 
 	virtual MyArrayMDSPtr <valueType, 3> MakeVolume() const;
@@ -378,6 +381,7 @@ class MyVoxContainer_Small
 public:
 	MyVoxContainer_Small(const MyVec3i& volBox)
 		:MyVoxContainer(volBox){};
+	virtual ~MyVoxContainer_Small();
 
 	virtual void Clear();
 	virtual int GetNumVoxes() const;
@@ -409,6 +413,7 @@ class MyVoxContainer_Tiny
 public:
 	MyVoxContainer_Tiny(const MyVec3i& volBox)
 		:MyVoxContainer(volBox){};
+	virtual ~MyVoxContainer_Tiny();
 
 	virtual void Clear();
 	virtual int GetNumVoxes() const;

@@ -22,6 +22,6 @@
 #define MY_INF_FLOAT 3.4028e+38
 #define MY_LARGE_FLOAT 3.4028e+10
 
-#define SIGN(x) (x>0?1:(x<0?-1:0))
+#define GETSIGN(x) (x>0?1:(x<0?-1:0))
 
 #endif

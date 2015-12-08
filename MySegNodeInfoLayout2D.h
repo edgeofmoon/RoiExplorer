@@ -6,7 +6,7 @@
 #include "MySegmentNodeInfo.h"
 #include "MyMap.h"
 #include "MySegmentAssembleGroup.h"
-
+#include "MyObjectStatus.h"
 class MySegNodeInfoLayout2D
 {
 public:
@@ -19,7 +19,9 @@ public:
 	void SetSegmentAssembleGroup(MySegmentAssembleGroupScPtr asmbGroup){
 		mSegAsmGroup = asmbGroup;
 	}
-
+	void SetBoxStatus(MyMapScPtr<const MySegmentNode*, MyObjectStatus> status){
+		mBoxStatus = status;
+	}
 	const MyBox2f& GetSegmentPosition(const MySegmentNode* segment) const{
 		return mBoxesOut->at(segment);
 	}
@@ -31,7 +33,9 @@ public:
 	void Update();
 
 protected:
+	// input
 	MyMapScPtr<const MySegmentNode*, MyBox2f> mBoxesIn;
+	MyMapScPtr<const MySegmentNode*, MyObjectStatus> mBoxStatus;
 	MySegmentAssembleGroupScPtr mSegAsmGroup;
 
 	// output layout
@@ -39,6 +43,9 @@ protected:
 
 	// sort boxes
 	static bool IsBoxLeft(const MyBox2f& box0, const MyBox2f& box1);
+
+	// get size by status
+	MyBox2f ComputeBox(const MySegmentNode* seg) const;
 };
 
 typedef MySharedPointer<MySegNodeInfoLayout2D> MySegNodeInfoLayout2DSPtr;

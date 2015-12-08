@@ -150,7 +150,8 @@ void MyTrackBall::pointToVector(int x, int y, int width, int height, MyVec3f& v)
 
 	/* project x, y onto a hemi-sphere centered within width, height. */
 	v[0] = (2.0f * x - width) / width;
-	v[1] = (height - 2.0f * y) / height;
+	//v[1] = (height - 2.0f * y) / height;
+	v[1] = (2.0f * y - height) / height;
 	d = sqrt(v[0] * v[0] + v[1] * v[1]);
 	v[2] = cos((3.14159265f / 2.0f) * ((d < 1.0f) ? d : 1.0f));
 	a = 1.0f / v.norm();

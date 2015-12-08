@@ -2,7 +2,7 @@
 
 #include "MyArray.h"
 #include "MyBoundingBox.h"
-
+#include "MySharedPointer.h"
 class MyMesh
 {
 public:
@@ -23,6 +23,10 @@ public:
 	int GetNumVertex() const;
 	int GetNumNormal() const;
 	int GetNumTriangle() const;
+
+	const MyArray3f& GetVertices() const;
+	const MyArray3f& GetNormals() const;
+	const MyArray3i& GetTriangles() const;
 
 	const float* GetVertexData() const;
 	const float* GetNormalData() const;
@@ -45,3 +49,5 @@ protected:
 
 };
 
+typedef MySharedPointer<MyMesh> MyMeshSPtr;
+typedef MySharedPointer<const MyMesh> MyMeshScPtr;

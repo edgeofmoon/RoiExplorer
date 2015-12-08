@@ -23,6 +23,20 @@ void MySegNodeInfoAssemble::AddSegmentNodeInfo(MySegmentNodeInfoScPtr segNodeInf
 	mSegNodeInfos->PushBack(segNodeInfo);
 }
 
+void MySegNodeInfoAssemble::RemoveSegmentNodeInfo(MySegmentNodeInfoScPtr segNodeInfo){
+	mSegNodeInfos->EraseOne(segNodeInfo);
+}
+
+void MySegNodeInfoAssemble::RemoveSegmentNodeInfo(const MySegmentNode* segNode){
+	MyArray<MySegmentNodeInfoScPtr>::iterator itr; 
+	for (itr = mSegNodeInfos->begin(); itr != mSegNodeInfos->end(); itr++){
+		if (itr->get()->GetSegmentNode().get() == segNode){
+			mSegNodeInfos->erase(itr);
+			break;
+		}
+	}
+}
+
 void MySegNodeInfoAssemble::Update(){
 	UpdateAllSegmentVolumes();
 	UpdateAllSegmentBoxes();

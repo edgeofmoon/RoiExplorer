@@ -127,6 +127,15 @@ public:
 		return tmp;
 	}
 
+	template<typename newT>
+	MyVec<newT, n> toType(){
+		MyVec<newT, n> tmp;
+		for (int i = 0; i<n; i++){
+			tmp[i] = newT(_d[i]);
+		}
+		return tmp;
+	}
+
     friend MyVec<T, n> operator+(const MyVec<T, n> &a,const MyVec<T, n> &b){
         MyVec<T, n> t;
 		for(int i = 0;i<n;i++){

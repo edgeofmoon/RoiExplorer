@@ -1151,7 +1151,7 @@ int line_thru_triangle(Point t0,Point t1,Point t2,Point p0,Point p1,Point *pout)
 	equ_plane(t0,t1,t2,&a,&b,&c,&d);
 
 	// see if there is an intersection of line with plane
-	if ( line_intersect_plane(a,b,c,d,p0,p1,&pint) );
+	if ( line_intersect_plane(a,b,c,d,p0,p1,&pint) )
 	{
 		// see if intersection point lies within triangle
 		if ( inside_triangle(t0,t1,t2,pint) )

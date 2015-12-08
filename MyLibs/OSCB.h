@@ -6,21 +6,28 @@
 #include <vector>
 #include <string>
 
-class OpenFileDialog
-{
-public:
-	OpenFileDialog(void);
+static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
-	TCHAR*DefaultExtension;
-	TCHAR*FileName;
-	TCHAR*Filter;
-	int FilterIndex;
-	int Flags;
-	TCHAR*InitialDir;
-	HWND Owner;
-	TCHAR*Title;
+namespace OSCB{
 
-	bool ShowDialog();
-};
+	class OpenFileDialog
+	{
+	public:
+		OpenFileDialog(void);
 
-std::vector<std::string> get_all_files_names_within_folder(std::string folder);
+		TCHAR*DefaultExtension;
+		TCHAR*FileName;
+		TCHAR*Filter;
+		int FilterIndex;
+		int Flags;
+		TCHAR*InitialDir;
+		HWND Owner;
+		TCHAR*Title;
+
+		bool ShowDialog();
+	};
+
+	std::vector<std::string> get_all_files_names_within_folder(std::string folder);
+
+	std::string BrowseFolder(std::string saved_path);
+}

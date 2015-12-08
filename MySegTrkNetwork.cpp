@@ -34,8 +34,8 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_RB(){
 	mSegmentTrackIndices = std::make_shared<MyArray<MyArrayiSPtr>>(mSegNodeInfos->size());
 	int numThread = std::thread::hardware_concurrency() - 1;
 	numThread = min(numThread, (int)mSegNodeInfos->size());
-	std::thread *tt = new std::thread[numThread - 1];
-	for (int i = 0; i < numThread - 1; i++){
+	std::thread *tt = new std::thread[numThread];
+	for (int i = 0; i < numThread; i++){
 		tt[i] = std::thread(MakeTracksCollection_RB, mTracks.get(), mSegNodeInfos.get(),
 			volSize, mSegmentTrackIndices.get());
 	}
@@ -53,7 +53,7 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_RB(){
 			}
 		}
 	}
-	for (int i = 0; i < numThread - 1; i++){
+	for (int i = 0; i < numThread; i++){
 		tt[i].join();
 	}
 	delete[] tt;
@@ -77,10 +77,10 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_TB(){
 	// generating threads for working
 	int numThread = std::thread::hardware_concurrency() - 1;
 	numThread = min(numThread, numTracks);
-	std::thread *tt = new std::thread[numThread - 1];
+	std::thread *tt = new std::thread[numThread];
 	// generate mutex locks
 	MyArray<std::mutex> regionlocks(mSegNodeInfos->size());
-	for (int i = 0; i < numThread - 1; i++){
+	for (int i = 0; i < numThread; i++){
 		tt[i] = std::thread(MakeTracksCollections_TB, mTracks.get(), &volumes, &regionlocks,
 			volSize, mSegmentTrackIndices.get(), 100000);
 	}
@@ -98,7 +98,7 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_TB(){
 			}
 		}
 	}
-	for (int i = 0; i < numThread - 1; i++){
+	for (int i = 0; i < numThread; i++){
 		tt[i].join();
 	}
 	for (int i = 0; i < mSegmentTrackIndices->size(); i++){
@@ -119,11 +119,15 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_RTB(){
 	MyArray<MyVoxContainerfSPtr> volumes;
 	for (int i = 0; i < mSegNodeInfos->size(); i++){
 		// force make large to ensure fast access
-		MyVoxContainerfScPtr autoContainer = mSegNodeInfos->at(i)->GetSegmentNode()->MakeAllVoxes();
-		volumes << MyVoxContainerf::MakeVoxContainer(
+		MyVoxContainerfSPtr autoContainer = mSegNodeInfos->at(i)->GetSegmentNode()->MakeAllVoxes();
+		volumes <<  MyVoxContainerf::MakeVoxContainer(
 			autoContainer.get(), MyVoxContainerf::ContainerType_Large);
 		mSegmentTrackIndices->operator[](i) = std::make_shared<MyArrayi>();
 	}
+	// single core
+	//MakeTracksCollection_RTB(mTracks.get(), &volumes, 0, numTracks-1,
+	//	volSize, mSegmentTrackIndices.get());
+	// multithread
 	int procUnit = 8000000;
 	for (int startTrk = 0; startTrk < numTracks; startTrk += procUnit){
 		int endTrk = min(startTrk+procUnit - 1, numTracks-1);
@@ -131,13 +135,12 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_RTB(){
 		MySegTrkNetwork::NextAssignmentIndex = 0;
 		int numThread = std::thread::hardware_concurrency() - 1;
 		numThread = min(numThread, (int)mSegNodeInfos->size());
-		std::thread *tt = new std::thread[numThread - 1];
-		for (int i = 0; i < numThread - 1; i++){
+		std::thread *tt = new std::thread[numThread];
+		for (int i = 0; i < numThread; i++){
 			tt[i] = std::thread(MakeTracksCollection_RTB, mTracks.get(), 
 				&volumes, startTrk, endTrk,
 				volSize, mSegmentTrackIndices.get());
 		}
-		//MakeTracksCollection(mTracks.get(), mSegNodeInfos.get(), volSize, mSegmentTrackIndices.get());
 		int lastAssignment = TotalAssignmentCompleted;
 		float lastProgress = -1;
 		while (lastAssignment < endTrk*mSegNodeInfos->size()){
@@ -151,13 +154,11 @@ void MySegTrkNetwork::UpdateRegionTrackIndices_RTB(){
 				}
 			}
 		}
-		for (int i = 0; i < numThread - 1; i++){
+		for (int i = 0; i < numThread; i++){
 			tt[i].join();
 		}
 		delete[] tt;
 	}
-
-
 	cout << "Region Tracks Computing Completed.\n";
 }
 

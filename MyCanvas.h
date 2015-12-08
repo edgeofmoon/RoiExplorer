@@ -19,7 +19,7 @@ public:
 	void Off();
 
 	// return the name of the pixel
-	MyVec4i GetName(int x, int y);
+	MyVec4i GetName(const MyVec2i& pos) const;
 
 	// control
 	void Resize(int w, int h);

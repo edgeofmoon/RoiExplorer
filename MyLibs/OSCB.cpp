@@ -1,4 +1,6 @@
 #include "OSCB.h"
+#include <shlobj.h>
+using namespace OSCB;
 
 OpenFileDialog::OpenFileDialog(void)
 {
@@ -38,7 +40,7 @@ bool OpenFileDialog::ShowDialog()
 }
 
 
-std::vector<std::string> get_all_files_names_within_folder(std::string folder)
+std::vector<std::string> OSCB::get_all_files_names_within_folder(std::string folder)
 {
 	std::vector<std::string> names;
 	char search_path[200];
@@ -61,4 +63,59 @@ std::vector<std::string> get_all_files_names_within_folder(std::string folder)
 		::FindClose(hFind);
 	}
 	return names;
+}
+
+// source: http://stackoverflow.com/questions/12034943/win32-select-directory-dialog-from-c-c
+int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+{
+
+	if (uMsg == BFFM_INITIALIZED)
+	{
+		std::string tmp = (const char *)lpData;
+		//std::cout << "path: " << tmp << std::endl;
+		SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
+	}
+
+	return 0;
+}
+
+std::string OSCB::BrowseFolder(std::string saved_path)
+{
+	TCHAR path[MAX_PATH];
+
+	//const char * path_param = saved_path.c_str();
+
+	std::wstring wsaved_path(saved_path.begin(), saved_path.end());
+	const wchar_t * path_param = wsaved_path.c_str();
+
+	BROWSEINFO bi = { 0 };
+	bi.lpszTitle = L"Browse for folder...";
+	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+	bi.lpfn = BrowseCallbackProc;
+	bi.lParam = (LPARAM)path_param;
+
+	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+
+	if (pidl != 0)
+	{
+		//get the name of the folder and put it in path
+		SHGetPathFromIDList(pidl, path);
+
+		//free memory used
+		IMalloc * imalloc = 0;
+		if (SUCCEEDED(SHGetMalloc(&imalloc)))
+		{
+			imalloc->Free(pidl);
+			imalloc->Release();
+		}
+
+		char DefChar = ' ';
+		char ch[260];
+		// convert wchar to char
+		WideCharToMultiByte(CP_ACP, 0, path,
+			-1, ch, 260, &DefChar, NULL);
+		return std::string(ch);
+	}
+
+	return "";
 }

@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <iostream>
+
+#include "MyVec.h"
 #include "MySharedPointer.h"
 
 // stored as row prior
@@ -14,10 +16,16 @@ public:
 	MyMatrix(int _m, int _n, T val = 0);
 	MyMatrix(const T ** indata,int _m, int _n);
 	MyMatrix(const T * indata, int _m, int _n, int _columnPrior = false);
-
+	template<typename type, int nDim>
+	MyMatrix(const MyVec<type, nDim>& vec, bool rowVec = false);
 	~MyMatrix(void);
 
 	void Print() const;
+
+	template<typename type, int nDim>
+	MyVec<type, nDim> GetRowVector(int iRow = 0) const;
+	template<typename type, int nDim>
+	MyVec<type, nDim> GetColVector(int iCol = 0) const;
 
 	inline int GetNumRows() const {return m;};
 	inline int GetNumCols() const {return n;};
@@ -136,6 +144,25 @@ MyMatrix<T>::MyMatrix(const T * indata, int _m, int _n, int _columnPrior){
 	}
 
 }
+
+
+template<typename T>
+template<typename type, int nDim>
+MyMatrix<T>::MyMatrix(const MyVec<type, nDim>& vec, bool rowVec){
+	if (rowVec){
+		m = 1;
+		n = nDim;
+	}
+	else{
+		m = nDim;
+		n = 1;
+	}
+	d = new T[nDim];
+	for (int i = 0; i < nDim; i++){
+		d[i] = T(vec[i]);
+	}
+}
+
 template<typename T>
 MyMatrix<T>::~MyMatrix(void)
 {
@@ -152,6 +179,26 @@ void MyMatrix<T>::Print() const{
 		}
 		std::cerr << std::endl;
 	}
+}
+
+template<typename T>
+template<typename type, int nDim>
+MyVec<type, nDim> MyMatrix<T>::GetRowVector(int iRow = 0) const{
+	MyVec<type, nDim> rst;
+	for (int i = 0; i < nDim && i < n; i++){
+		rst[i] = type(At(iRow, i));
+	}
+	return rst;
+}
+
+template<typename T>
+template<typename type, int nDim>
+MyVec<type, nDim> MyMatrix<T>::GetColVector(int iCol = 0) const{
+	MyVec<type, nDim> rst;
+	for (int i = 0; i < nDim && i < m; i++){
+		rst[i] = type(At(i, iCol));
+	}
+	return rst;
 }
 
 template<typename T>
@@ -402,7 +449,7 @@ MyMatrix<T>  MyMatrix<T>::GetNormalizedByCol() const
 template<typename T>
 MyMatrix<T> MyMatrix<T>::GetEqualVarByCol() const{
 	MyMatrix<T> tmp(m, n);
-	for (unsigned j = 0; j<n; j++){
+	for (int j = 0; j<n; j++){
 		T var = FindVarianceByCol(j);
 		for (int i = 0; i<m; i++){
 			if (var != 0){

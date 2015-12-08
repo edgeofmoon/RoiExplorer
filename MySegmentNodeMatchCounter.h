@@ -15,8 +15,12 @@ public:
 
 	void Update();
 
-	int AddGroupByTree(const MySegmentNode* root);
-	int AddGroupByArray(const MyArray<const MySegmentNode*>* nodeArray);
+	void AddToGroupAndUpdate(const MySegmentNode* node, int groupIdx);
+	void RemoveSegment(const MySegmentNode* node, int groupIdx);
+
+	void SetGroupByTree(const MySegmentNode* root, int groupIdx);
+	void SetGroupByArray(const MyArray<const MySegmentNode*>* nodeArray, int groupIdx);
+	void SetGroupByArray(const MyArray<MySegmentNodeSPtr>* nodeArray, int groupIdx);
 
 	const MyArray<MyArray<const MySegmentNode*>>& GetNodeGroups() const {
 		return mNodeGroups;

@@ -14,7 +14,7 @@ MyBloomDrawingHelper::~MyBloomDrawingHelper()
 void MyBloomDrawingHelper::Update(){
 }
 
-void MyBloomDrawingHelper::Render(int width, int height){
+void MyBloomDrawingHelper::Render(){
 	const MyArray<const MySegmentNode*>& nodes
 		= mMatchCounter->GetNodeGroups().back();
 	const MyMap<const MySegmentNode*, MatchCount>& nodeMatchCount
@@ -36,14 +36,18 @@ void MyBloomDrawingHelper::Render(int width, int height){
 				totalMatched += nmItr->second;
 				nmItr++;
 			}
-			totalMatched = node->GetUniqueVoxes()->GetNumVoxes();
+			totalMatched = std::max(totalMatched, node->GetUniqueVoxes()->GetNumVoxes());
 			// loop again to draw boxes
 			nmItr = matchCount.begin();
 			float totalUsedRatio = 0;
 			while (nmItr != matchCount.end()){
 				float ratio = nmItr->second / (float)totalMatched;
+				// fill from bottom
+				//MyBox2f cutBox = this->CutBox(
+				//	bigBox, totalUsedRatio, totalUsedRatio + ratio);
+				// fill from top
 				MyBox2f cutBox = this->CutBox(
-					bigBox, totalUsedRatio, totalUsedRatio + ratio);
+					bigBox, 1 - totalUsedRatio - ratio, 1-totalUsedRatio);
 				MyVec4f color = mRoiColors->at(nmItr->first);
 				MyBox2f bloomBox = cutBox;
 				//bloomBox.ScaleAtCenter(MyVec2f(2, 1.2));
@@ -62,10 +66,10 @@ void MyBloomDrawingHelper::DrawBloomBox(
 	MyVec2f center = bloomBox.GetCenter();
 	glBegin(GL_QUADS);
 	glColor4f(color[0], color[1], color[2], 1);
-	glVertex2fv(&bloomBox.GetLowPos()[0]);
-	glVertex2f(bloomBox.GetHighPos()[0], bloomBox.GetLowPos()[1]);
-	glVertex2fv(&bloomBox.GetHighPos()[0]);
-	glVertex2f(bloomBox.GetLowPos()[0], bloomBox.GetHighPos()[1]);
+	glVertex3f(bloomBox.GetLowPos()[0], bloomBox.GetLowPos()[1], 0.3);
+	glVertex3f(bloomBox.GetHighPos()[0], bloomBox.GetLowPos()[1], 0.3);
+	glVertex3f(bloomBox.GetHighPos()[0], bloomBox.GetHighPos()[1], 0.3);
+	glVertex3f(bloomBox.GetLowPos()[0], bloomBox.GetHighPos()[1], 0.3);
 	glEnd();
 }
 /*

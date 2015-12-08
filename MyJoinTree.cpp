@@ -36,7 +36,7 @@ void MyJoinTree::Update(){
 
 	//	A.	create the array holding the join components, all initialized to NULL
 	MyArrayMD<MyComponent*, 3> joinComponents(mVolumn->GetDimSizes(), NULL);
-	My3dArrayi joinArcs(mVolumn->GetDimSizes(), -1);
+	//My3dArrayi joinArcs(mVolumn->GetDimSizes(), -1);
 
 	//	B.	do a loop in downwards order, adding each vertex to the union-find:
 	for (int iVoxel = nVoxels - 1; iVoxel >= 0; iVoxel--){
@@ -63,8 +63,8 @@ void MyJoinTree::Update(){
 					joinComponent = neighborComponent;
 					neighborComponent->seedTo = neighborIndex;
 					neighborComponent->seedFrom = index;
-					MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
-					joinArcs[join] = index;
+					//MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
+					//joinArcs[join] = index;
 					numNeighborComponents++;
 					// increase the count
 					joinComponent->mVertices->PushBack(index);
@@ -82,8 +82,8 @@ void MyJoinTree::Update(){
 					// update the neighbor's component
 					neighborComponent->seedTo = neighborIndex;
 					neighborComponent->seedFrom = index;
-					MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
-					joinArcs[join] = index;
+					//MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
+					//joinArcs[join] = index;
 					neighborComponent->loEnd = index;
 					neighborComponent->nextLo = newComponent;
 					neighborComponent->lastLo = joinComponent;
@@ -109,8 +109,8 @@ void MyJoinTree::Update(){
 					// update the neighbor's component
 					neighborComponent->seedTo = neighborIndex;
 					neighborComponent->seedFrom = index;
-					MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
-					joinArcs[join] = index;
+					//MyVec3i join = mVolumn->ComputePosition(neighborComponent->loEnd);
+					//joinArcs[join] = index;
 					neighborComponent->loEnd = index;
 					neighborComponent->nextLo = joinComponent;
 					neighborComponent->lastLo = joinComponent->lastHi;
@@ -139,8 +139,8 @@ void MyJoinTree::Update(){
 		}
 	}
 	//	C.	tie off the final component to minus_infinity
-	MyVec3i join = mVolumn->ComputePosition(joinComponent->loEnd);
-	joinArcs[join] = -1;
+	//MyVec3i join = mVolumn->ComputePosition(joinComponent->loEnd);
+	//joinArcs[join] = -1;
 	joinComponent->loEnd = -1;
 	joinComponent->nextLo = joinComponent;
 	joinComponent->lastLo = joinComponent;
@@ -248,7 +248,7 @@ MySegmentNodeSPtr MyJoinTree::MakeSegment(MyComponent* component){
 
 MySegmentNodeSPtr MyJoinTree::MakeJoinTree(MyComponent* joinRoot){
 	MySegmentNodeSPtr root = 0;
-	int segmentIndex = 0;
+	int nSegs = 0;
 	// stack of parent-child pairs
 	stack<pair<MySegmentNodeSPtr, MyComponent*>> stackComponents;
 	stackComponents.push(make_pair(MySegmentNodeSPtr(0), joinRoot));
@@ -257,7 +257,8 @@ MySegmentNodeSPtr MyJoinTree::MakeJoinTree(MyComponent* joinRoot){
 		MyComponent* thisComponent = stackComponents.top().second;
 		MySegmentNodeSPtr thisParent = stackComponents.top().first;
 		MySegmentNodeSPtr thisSegment = MakeSegment(thisComponent);
-		thisSegment->SetIndex(segmentIndex++);
+		thisSegment->SetAutoIndex();
+		nSegs++;
 		// this is the root
 		// and root has no parent
 		if (!root) root = thisSegment;
@@ -274,7 +275,7 @@ MySegmentNodeSPtr MyJoinTree::MakeJoinTree(MyComponent* joinRoot){
 			}
 		}
 	}
-	cout << "Join tree has " << segmentIndex << " segments\n";
+	cout << "Join tree has " << nSegs << " segments\n";
 	return root;
 }
 

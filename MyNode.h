@@ -12,7 +12,7 @@ class MyNode
 {
 public:
 	MyNode();
-	~MyNode();
+	virtual ~MyNode();
 
 	enum Direction{
 		Direction_In = 1,
@@ -102,6 +102,13 @@ public:
 
 		const_TreeIterator(const MyNode* root, Direction dir)
 			:mCurrent(root), mDirection(dir = Direction_Out) {
+		};
+		const_TreeIterator(const TreeIterator& itr)
+			:mCurrent(itr.mCurrent), mDirection(itr.mDirection){
+			mStack.clear();
+			for (int i = 0; i < itr.mStack.size(); i++){
+				mStack << itr.mStack[i];
+			}
 		};
 		// Operators : misc
 		inline const MyNode* operator*() const {

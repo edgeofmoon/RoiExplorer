@@ -6,6 +6,7 @@
 #include "MyLabelManager.h"
 #include "MySegNodeInfoLayout2D.h"
 #include "MySegmentAssembleGroup.h"
+#include "MySharedPointer.h"
 
 class MySegsPlanarDrawer
 {
@@ -30,19 +31,29 @@ public:
 	MySegNodeInfoAssembleScPtr GetSegmentNodeInfoAssemble(){
 		return mSegAssembleGroup->front();
 	};
-
+	MyLabelManagerSPtr GetLabelManager(){
+		return mLabelManager;
+	}
+	MySegNodeInfoLayout2DSPtr GetLayoutManager(){
+		return mLayoutManager;
+	}
+	MySegTrkNetworkSPtr GetNetwork(){
+		return mSegTrkNetwork;
+	}
+	const MyVec2f& GetHistogramRange() const{
+		return mHistogramRange;
+	}
 	void SetLabels(MyMapScPtr<int, MyString> labels);
 
 	void SetLinkDrawThreshold(float thres){ mLinkDrawThreshold = thres; };
-	
+
 	void SetSegNodeColor(MyMapScPtr<const MySegmentNode*, MyVec4f> color){
 		mSegNodeColor = color;
 	};
 	void Update();
 
-	void Render(int winWidth, int winHeight);
+	void Render();
 	void Resize(int width, int height);
-	void CompileShader(int shader = 0);
 
 protected:
 	MyLabelManagerSPtr mLabelManager;
@@ -57,29 +68,13 @@ protected:
 		const MyVec4i name, float startWidth, float endWidth = 0);
 
 	float mLinkDrawThreshold;
+	MyVec2f mHistogramRange;
 
 	// temp solution
-	void DrawBoundary();
-	void DrawArrowBoundary(const MyVec2f fromPos, const MyVec2f toPos, const MyVec4f color,
-		const MyVec4i name, float startWidth, float endWidth = 0);
+	void DrawBoxes();
 	void DrawDistribution(int idx);
-
-	int mShaderProgram;
-
-	MyArray2f mVertices;
-	MyArray4f mColors;
-	MyArray4i mNames;
-
-	unsigned int mVertexArray;
-	unsigned int mPositionBuffer;
-	unsigned int mColorBuffer;
-	unsigned int mNameBuffer;
-	unsigned int mIndexBuffer;
-	unsigned int mPositionAttribute;
-	unsigned int mColorAttribute;
-	unsigned int mNameAttribute;
-
-
-	void LoadGeometry();
+	void DrawNetwork();
 };
 
+typedef MySharedPointer<MySegsPlanarDrawer> MySegsPlanarDrawerSPtr;
+typedef MySharedPointer<const MySegsPlanarDrawer> MySegsPlanarDrawerScPtr;

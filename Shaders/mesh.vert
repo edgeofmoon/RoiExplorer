@@ -2,15 +2,13 @@
 
 uniform mat4x4 mvMat;
 uniform mat4x4 projMat;
-uniform vec3 cutCone;
 uniform float transExp;
+uniform ivec4 name;
 
 in vec3 position;
 in vec3 normal;
-in vec3 color;
 
 out vec3 eyeCoordNormal;
-out vec3 fcolor;
 out vec3 eyeCoordPos;
 out vec3 rawPosition;
 

@@ -19,6 +19,7 @@ public:
 	void SetComponentFilter(MyComponentFilterSPtr cFilter){
 		mFilter = cFilter;
 	}
+	My3dArrayfScPtr GetVolumn() const { return mVolumn; };
 	MySegmentNodeSPtr GetRoot(){ return mJoinRoot; };
 	MySegmentNodeScPtr GetRoot() const { return mJoinRoot; };
 

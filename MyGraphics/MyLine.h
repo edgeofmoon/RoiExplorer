@@ -9,7 +9,7 @@ class MyLine{
 public:
 	MyLine();
 	MyLine(const MyVec<T, n>& start, const MyVec<T, n>& end);
-	~MyLine(){};
+	virtual ~MyLine(){};
 
 	void SetLine( const MyVec<T, n>& start, const MyVec<T, n>& end);
 

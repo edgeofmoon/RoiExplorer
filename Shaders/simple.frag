@@ -2,6 +2,7 @@
 
 uniform mat4x4 mvMat;
 uniform mat4x4 projMat;
+uniform vec4 color;
 uniform ivec4 name;
 
 in vec3 fposition;
@@ -22,7 +23,7 @@ void main() {
 	vec3 hv = normalize(eyeDir+lightDir);
 	//float specular = 0.5*pow(clamp(dot(hv,normal),0,1),16);
 	float specular = 0.5*pow(abs(dot(hv,normal)),16);
-	vec4 thisColor = vec4(1,0,0,1);
+	vec4 thisColor = color;
 	fragColour = thisColor*(ambient+diffusion);
 	fragColour += vec4(specular,specular,specular,0);
 	fragColour.a = 1;

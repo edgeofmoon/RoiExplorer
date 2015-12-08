@@ -15,8 +15,7 @@ void MySegNodeInfoEncoder::Update(){
 	MyVec3i voxSize(-1, -1, -1);
 	MyArrayi voxIndices;
 
-	MyNode::const_TreeIterator treeItr = mSegNodeInfo->GetSegmentNode()->Begin();
-	voxSize = static_cast<const MySegmentNode*>(*treeItr)->GetUniqueVoxes()->GetVolumeSize();
+	voxSize = mSegNodeInfo->GetSegmentNode()->GetUniqueVoxes()->GetVolumeSize();
 
 	MySegmentNode::const_VoxelIterator itr = mSegNodeInfo->GetSegmentNode()->VoxelBegin();
 	MySegmentNode::const_VoxelIterator itrEnd = mSegNodeInfo->GetSegmentNode()->VoxelEnd();

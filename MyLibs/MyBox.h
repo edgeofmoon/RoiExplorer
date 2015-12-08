@@ -23,10 +23,16 @@ public:
 	MyVec<T, n> GetSize() const;
 	MyVec<T,2> GetRange(int idx) const;
 
+	template <typename type>
+	MyVec<float, n> ComputeNormalizedPosition(const MyVec<type, n>& pos) const;
+	template <typename type>
+	MyVec<T, n> ComputeDenormalizedPosition(const MyVec<type, n>& normPos) const;
+
 	void Engulf(const MyVec<T, n>& point);
 	void Engulf(const MyBox<T, n>& box);
 	void Scale(const MyVec<T, n>& scale);
 	void ScaleAtCenter(const MyVec<T, n>& scale);
+	void ScaleAtPosition(const MyVec<T, n>& pos, const MyVec<T, n>& scale);
 
 	T ComputeNearestDistance(const MyVec<T, n>& pt) const;
 
@@ -165,6 +171,16 @@ void MyBox<T, n>::ScaleAtCenter(const MyVec<T, n>& scale){
 }
 
 template<typename T, int n>
+void MyBox<T, n>::ScaleAtPosition(const MyVec<T, n>& pos, const MyVec<T, n>& scale){
+	MyVec<T, n> lowSize = mLow - pos;
+	MyVec<T, n> highSize = mHigh - pos;
+	for (int i = 0; i < n; i++){
+		mLow[i] = pos[i] + lowSize[i] * scale[i];
+		mHigh[i] = pos[i] + highSize[i] * scale[i];
+	}
+}
+
+template<typename T, int n>
 T MyBox<T, n>::ComputeNearestDistance(const MyVec<T, n>& pt) const{
 	MyVec<T, n> line;
 	for (int i = 0; i < n; i++){
@@ -177,7 +193,27 @@ template<typename T, int n>
 MyVec<T,2> MyBox<T,n>::GetRange(int idx) const{
 	return MyVec<T,2>(mLow[idx], mHigh[idx]);
 }
-	
+
+template<typename T, int n>
+template <typename type>
+MyVec<float, n> MyBox<T, n>::ComputeNormalizedPosition(const MyVec<type, n>& pos) const{
+	MyVec<float, n> rst;
+	for (int i = 0; i < n; i++){
+		rst[i] = (pos[i] - mLow[i]) / (float)GetSize(i);
+	}
+	return rst;
+}
+
+template<typename T, int n>
+template <typename type>
+MyVec<T, n> MyBox<T, n>::ComputeDenormalizedPosition(const MyVec<type, n>& normPos) const{
+	MyVec<T, n> rst;
+	for (int i = 0; i < n; i++){
+		rst[i] = normPos[i] * GetSize(i) + mLow[i];
+	}
+	return rst;
+}
+
 template<typename T, int n>
 MyBox<T,n> MyBox<T,n>::operator+(const MyVec<T,n>& offset) const{
 	return MyBox<T,n>(this->GetLowPos()+offset, this->GetHighPos()+offset);
