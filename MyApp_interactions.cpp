@@ -54,9 +54,15 @@ int MyApp::RemoveIsosurface(int x, int y){
 	return 0;
 }
 
+/*
 int MyApp::UpdateRoiSurface(int x, int y){
 	MyVec2i pixelPos(x, y);
 	const MySegmentNode* roi = mRoiView->ComputeSegmentNodeAt(pixelPos);
+	if (roi){
+		this->AddRoiSurface(roi);
+		return 1;
+	}
+	roi = mSecondRoiView->ComputeSegmentNodeAt(pixelPos);
 	if (roi){
 		this->AddRoiSurface(roi);
 		return 1;
@@ -66,16 +72,23 @@ int MyApp::UpdateRoiSurface(int x, int y){
 
 int MyApp::RemoveRoisurface(int x, int y){
 	MyVec2i pixelPos(x, y);
-	if (!mRoiView->IsIntersected(pixelPos)){
-		return 0;
+	if (mRoiView->IsIntersected(pixelPos)){
+		const MySegmentNode* roi = mRoiView->ComputeSegmentNodeAt(pixelPos);
+		if (roi){
+			this->RemoveRoiSurface(roi);
+			return 1;
+		}
 	}
-	const MySegmentNode* roi = mRoiView->ComputeSegmentNodeAt(pixelPos);
-	if (roi){
-		this->RemoveRoiSurface(roi);
-		return 1;
+	if (mSecondRoiView->IsIntersected(pixelPos)){
+		const MySegmentNode* roi = mSecondRoiView->ComputeSegmentNodeAt(pixelPos);
+		if (roi){
+			this->RemoveRoiSurface(roi);
+			return 1;
+		}
 	}
 	return 0;
 }
+*/
 
 int MyApp::RemoveSurface(int x, int y){
 	MyVec2i pixelPos(x, y);
@@ -95,6 +108,10 @@ int MyApp::RemoveSurface(int x, int y){
 		else if (name[0] == 2){
 			const MySegmentNode* node = mRoiView->GetSegmentNodeByName(name);
 			mRoiView->UnsetSelect(node);
+		}
+		else if (name[0] == 3){
+			const MySegmentNode* node = mSecondRoiView->GetSegmentNodeByName(name);
+			mSecondRoiView->UnsetSelect(node);
 		}
 		return 1;
 	}
@@ -128,17 +145,34 @@ int MyApp::CreateRoiFromJoinTree(){
 			&voxValues, itr->first->GetVolumeSize());
 		MySegmentNodeSPtr newRoi = std::make_shared<MySegmentNode>();
 		newRoi->SetAutoIndex();
-		// add voxels to this roi
 		newRoi->SetUniqueVoxes(voxels);
-		// add to roi list
-		mAsmbGroup->AddSegmentNode(newRoi);
+		// add voxels to this roi
+		mRoiView->GetRoiDrawer()->GetSegmentAssembleGroup()->AddSegmentNode(newRoi);
+		mRoiView->GetRoiDrawer()->GetSegmentAssembleGroup()->Update();
 		// update everything related
-		mAsmbGroup->Update();
-		mRoiView->GetRoiDrawer()->GetNetwork()->Update();
+		if (mRoiView->GetRoiDrawer()->GetNetwork()){
+			mRoiView->GetRoiDrawer()->GetNetwork()->Update();
+		}
 		mRoiView->GetRoiDrawer()->GetLayoutManager()->
-			SetBoxesIn(mAsmbGroup->front()->GetSegment2DBoxes());
+			SetBoxesIn(mRoiView->GetRoiDrawer()->GetSegmentAssembleGroup()
+			->front()->GetSegment2DBoxes());
 		mRoiView->GetRoiDrawer()->GetLayoutManager()->Update();
 		mRoiView->GetRoiDrawer()->Update();
+
+		if (mSecondRoiView){
+			mSecondRoiView->GetRoiDrawer()->GetSegmentAssembleGroup()->AddSegmentNode(newRoi);
+			mSecondRoiView->GetRoiDrawer()->GetSegmentAssembleGroup()->Update();
+			if (mSecondRoiView->GetRoiDrawer()->GetNetwork()
+				&& !(mRoiView->GetRoiDrawer()->GetNetwork())){
+				mSecondRoiView->GetRoiDrawer()->GetNetwork()->Update();
+			}
+			mSecondRoiView->GetRoiDrawer()->GetLayoutManager()->
+				SetBoxesIn(mSecondRoiView->GetRoiDrawer()->
+				GetSegmentAssembleGroup()->front()->GetSegment2DBoxes());
+			mSecondRoiView->GetRoiDrawer()->GetLayoutManager()->Update();
+			mSecondRoiView->GetRoiDrawer()->Update();
+		}
+
 		mConnectorView->GetConnectorDrawer()->GetMatchCounter()
 			->AddToGroupAndUpdate(newRoi.get(), 0);
 		return 1;
@@ -146,6 +180,8 @@ int MyApp::CreateRoiFromJoinTree(){
 	return 1;
 }
 
+/*
+// not used, and it does not consider second ROI view
 int MyApp::RemoveRoi(){
 	if (mRoiView->GetRoiDrawer()->GetLayoutManager()->GetBoxesOut()->size() < 2){
 		// lets at least keep 1 Roi
@@ -184,37 +220,43 @@ int MyApp::RemoveRoi(){
 	}
 	return 0;
 }
+*/
 
-int MyApp::DisableRoi(){
-	MyMapScPtr<const MySegmentNode*, MyObjectStatus> marks = mRoiView->GetStatus();
+int MyApp::DisableRoi(MyRoiViewSPtr roiView){
+	if (!roiView) return 0;
+	MyMapScPtr<const MySegmentNode*, MyObjectStatus> marks = roiView->GetStatus();
 	MyMap<const MySegmentNode*, MyObjectStatus>::const_iterator itr;
 	bool hasUpdate = false;
 	for (itr = marks->begin(); itr != marks->end();){
 		// remove from match
-		mConnectorView->GetConnectorDrawer()->GetMatchCounter()
-			->RemoveSegment(itr->first, 0);
+		if (roiView.get() == mRoiView.get()){
+			mConnectorView->GetConnectorDrawer()->GetMatchCounter()
+				->RemoveSegment(itr->first, 0);
+		}
 		// remove from spatial view
-		MyVec4i name = mRoiView->GetSegmentNodeName(itr->first);
+		MyVec4i name = roiView->GetSegmentNodeName(itr->first);
 		MySurfaceRendererSPtr renderer = mSpatialView->GetSurfaceRendererByName(name);
 		mSpatialView->RemoveSurfaceRenderer(renderer);
 		// remove the instance
-		mRoiView->SetDisable(itr->first);
-		mRoiView->UnsetSelect(itr++->first);
+		roiView->SetDisable(itr->first);
+		roiView->UnsetSelect(itr++->first);
 		hasUpdate = true;
 	}
 	if (hasUpdate){
 		// update everything related
-		mRoiView->GetRoiDrawer()->GetLayoutManager()->
-			SetBoxesIn(mAsmbGroup->front()->GetSegment2DBoxes());
-		mRoiView->GetRoiDrawer()->GetLayoutManager()->Update();
-		mRoiView->GetRoiDrawer()->Update();
+		roiView->GetRoiDrawer()->GetLayoutManager()->
+			SetBoxesIn(roiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->front()->GetSegment2DBoxes());
+		roiView->GetRoiDrawer()->GetLayoutManager()->Update();
+		roiView->GetRoiDrawer()->Update();
 		return 1;
 	}
 	return 0;
 }
 
-int MyApp::EnableRoi(){
-	MyMapScPtr<const MySegmentNode*, MyObjectStatus> marks = mRoiView->GetStatus();
+int MyApp::EnableRoi(MyRoiViewSPtr roiView){
+	if (!roiView) return 0;
+	MyMapScPtr<const MySegmentNode*, MyObjectStatus> marks = roiView->GetStatus();
 	MyMap<const MySegmentNode*, MyObjectStatus>::const_iterator itr;
 	bool hasUpdate = false;
 	for (itr = marks->begin(); itr != marks->end();){
@@ -229,11 +271,13 @@ int MyApp::EnableRoi(){
 			continue;
 		}
 		// add to match
-		mConnectorView->GetConnectorDrawer()->GetMatchCounter()
-			->AddToGroupAndUpdate(itr->first, 0);
+		if (roiView.get() == mRoiView.get()){
+			mConnectorView->GetConnectorDrawer()->GetMatchCounter()
+				->AddToGroupAndUpdate(itr->first, 0);
+		}
 
 		// add to spatial view
-		MyVec4i name = mRoiView->GetSegmentNodeName(itr->first);
+		MyVec4i name = roiView->GetSegmentNodeName(itr->first);
 		MySurfaceRendererSPtr oldRenderer = mSpatialView->GetSurfaceRendererByName(name);
 		if (!oldRenderer){
 			My3dArrayfSPtr vol = itr->first->GetUniqueVoxes()->MakeVolume();
@@ -246,7 +290,8 @@ int MyApp::EnableRoi(){
 			// and lower than min will do
 			tracker.SetIsovalue(0.0001f);
 			tracker.Update();
-			MyVec4f color = mAsmbGroup->GetRoiColors()->at(itr->first);
+			MyVec4f color = roiView->GetRoiDrawer()->
+				GetSegmentAssembleGroup()->GetRoiColors()->at(itr->first);
 			MySurfaceRendererSPtr renderer = std::make_shared<MySurfaceRenderer>();
 			renderer->SetGeometry(tracker.GetVertices().get(),
 				tracker.GetNormals().get(), tracker.GetTriangles().get());
@@ -258,15 +303,16 @@ int MyApp::EnableRoi(){
 		}
 
 		// enable the instance
-		mRoiView->UnsetDisable(itr++->first);
+		roiView->UnsetDisable(itr++->first);
 		hasUpdate = true;
 	}
 	if (hasUpdate){
 		// update everything related
-		mRoiView->GetRoiDrawer()->GetLayoutManager()->
-			SetBoxesIn(mAsmbGroup->front()->GetSegment2DBoxes());
-		mRoiView->GetRoiDrawer()->GetLayoutManager()->Update();
-		mRoiView->GetRoiDrawer()->Update();
+		roiView->GetRoiDrawer()->GetLayoutManager()->
+			SetBoxesIn(roiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->front()->GetSegment2DBoxes());
+		roiView->GetRoiDrawer()->GetLayoutManager()->Update();
+		roiView->GetRoiDrawer()->Update();
 		return 1;
 	}
 	return 0;
@@ -313,6 +359,7 @@ int MyApp::UpdateJoinTree(){
 			= mJoinTreeView->GetStatisticsDrawer();
 		statDrawer->ClearRois();
 		statDrawer->AddRoiByTree(joinTree->GetRoot().get());
+		statDrawer->Update();
 		return 1;
 	}
 	delete openFileDialog;
@@ -332,7 +379,8 @@ int MyApp::UpdateAssembleGroup(){
 		// retrive ROIs
 		MyArray<MySegmentNodeSPtr> ROIs;
 		MyArrayScPtr<MySegmentNodeInfoScPtr> segInfos
-			= mAsmbGroup->front()->GetSegmentNodeInfos();
+			= mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->front()->GetSegmentNodeInfos();
 		for (int i = 0; i < segInfos->size(); i++){
 			ROIs << segInfos->at(i)->GetSegmentNode();
 		}
@@ -340,10 +388,14 @@ int MyApp::UpdateAssembleGroup(){
 			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs);
 		MySegNodeInfoAssembleSPtr segAsmb_scz
 			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs);
-		mAsmbGroup->clear();
-		mAsmbGroup->PushBack(segAsmb_control);
-		mAsmbGroup->PushBack(segAsmb_scz);
-		mAsmbGroup->Update();
+		mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->clear();
+		mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->PushBack(segAsmb_control);
+		mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->PushBack(segAsmb_scz);
+		mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->Update();
 		MySegNodeInfoLayout2DSPtr seglayout 
 			= mRoiView->GetRoiDrawer()->GetLayoutManager();
 		seglayout->SetBoxesIn(segAsmb_control->GetSegment2DBoxes());
@@ -353,6 +405,72 @@ int MyApp::UpdateAssembleGroup(){
 			= mJoinTreeView->GetStatisticsDrawer();
 		statDrawer->SetGroupVolume(segAsmb_control->GetSegmentNodeInfos()->front()->GetVolumes(), 0);
 		statDrawer->SetGroupVolume(segAsmb_scz->GetSegmentNodeInfos()->front()->GetVolumes(), 1);
+		return 1;
+	}
+	return 0;
+}
+
+
+int MyApp::AddAssembleGroup(){
+	static string lastPath("C:\\");
+	string path = OSCB::BrowseFolder(lastPath);
+	lastPath = path;
+	string path_ctr = path + "\\control\\";
+	string path_scz = path + "\\scz\\";
+	cout << "Update control group to " << path_ctr << endl;
+	cout << "Update scz group to " << path_scz << endl;
+	if (!path.empty()){
+
+		// retrive ROIs
+		MyArray<MySegmentNodeSPtr> ROIs;
+		MyArrayScPtr<MySegmentNodeInfoScPtr> segInfos
+			= mRoiView->GetRoiDrawer()->
+			GetSegmentAssembleGroup()->front()->GetSegmentNodeInfos();
+		for (int i = 0; i < segInfos->size(); i++){
+			ROIs << segInfos->at(i)->GetSegmentNode();
+		}
+		MySegNodeInfoAssembleSPtr segAsmb_control
+			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs);
+		MySegNodeInfoAssembleSPtr segAsmb_scz
+			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs);
+		MySegmentAssembleGroupSPtr asmbGroup = make_shared<MySegmentAssembleGroup>();
+		asmbGroup->PushBack(segAsmb_control);
+		asmbGroup->PushBack(segAsmb_scz);
+		asmbGroup->Update();
+		MySegNodeInfoLayout2DSPtr seglayout = std::make_shared<MySegNodeInfoLayout2D>();
+		seglayout->SetBoxesIn(segAsmb_control->GetSegment2DBoxes());
+		seglayout->SetSegmentAssembleGroup(asmbGroup);
+		seglayout->SetBaseBoxVerticalRange(MyVec2f(0.5,0.7));
+		seglayout->Update();
+		MySegsPlanarDrawerSPtr segsDrawer = make_shared<MySegsPlanarDrawer>();
+		segsDrawer->SetLayout(seglayout);
+		segsDrawer->SetSegmentAssembleGroup(asmbGroup);
+		// transfer the network to here
+		segsDrawer->SetSegTrkNetwork(mRoiView->GetRoiDrawer()->GetNetwork());
+		mRoiView->GetRoiDrawer()->SetSegTrkNetwork(0);
+		segsDrawer->GetLabelManager()->SetFont(mRoiView->GetRoiDrawer()->GetLabelManager()->GetFont());
+		segsDrawer->SetLabels(mRoiView->GetRoiDrawer()->GetLabelManager()->GetLabels());
+		segsDrawer->SetSegNodeColor(asmbGroup->GetRoiColors());
+		segsDrawer->Update();
+		mSecondRoiView = make_shared<MyRoiView>();
+		mSecondRoiView->SetMySegsPlanarDrawer(segsDrawer);
+		mSecondRoiView->SetIndex(3);
+		seglayout->SetBoxStatus(mSecondRoiView->GetStatus());
+
+		mSecondRoiView->Signal_SegmentSelected.Connect(this, &MyApp::AddRoiSurface);
+		mSecondRoiView->Signal_SegmentUnselected.Connect(this, &MyApp::RemoveRoiSurface);
+
+		mRoiConnectorDrawer.SetRoiViews(mRoiView, mSecondRoiView);
+		MyBox2i viewport = *mRoiView;
+		viewport.Engulf(*mSecondRoiView);
+		mRoiConnectorDrawer.SetViewport(viewport);
+
+		this->UpdateLayout();
+		// update distribution drawers
+		//MyRoiStatisticsDrawerSPtr statDrawer
+		//	= mJoinTreeView->GetStatisticsDrawer();
+		//statDrawer->SetGroupVolume(segAsmb_control->GetSegmentNodeInfos()->front()->GetVolumes(), 0);
+		//statDrawer->SetGroupVolume(segAsmb_scz->GetSegmentNodeInfos()->front()->GetVolumes(), 1);
 		return 1;
 	}
 	return 0;

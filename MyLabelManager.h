@@ -19,6 +19,8 @@ public:
 	void SetBoxes(MyMapScPtr<const MySegmentNode*, MyBox2f> boxes);
 	void SetFont(MyFontScPtr font);
 
+	MyMapScPtr<int, MyString> GetLabels() const { return mLabels; };
+	MyFontScPtr GetFont() const{ return mFont; };
 	void Update();
 
 	void Render();

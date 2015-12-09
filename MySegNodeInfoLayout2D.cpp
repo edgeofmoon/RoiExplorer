@@ -8,6 +8,10 @@ using namespace std;
 MySegNodeInfoLayout2D::MySegNodeInfoLayout2D()
 {
 	mBoxesOut = std::make_shared<MyMap<const MySegmentNode*, MyBox2f>>();
+	mBaseBoxVerticalRange = MyVec2f(0.4, 0.6);
+	mTScoreBoxHeight = 0.2;
+	mBaseBoxWidth = 0.05;
+	mSmallBoxWidth = 0.005;
 }
 
 
@@ -178,7 +182,7 @@ void MySegNodeInfoLayout2D::Update(){
 	// totally ignore the encoding for now
 	int numBoxes = mBoxesIn->size();
 	MyVec2f currentOffset(0, 0);
-	float interval = 0.004;
+	float interval = mSmallBoxWidth;
 	for (MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = segOrdered.begin();
 		itr != segOrdered.end(); itr++){
 		MyBox2f box = this->ComputeBox(itr->first);
@@ -195,21 +199,21 @@ bool MySegNodeInfoLayout2D::IsBoxLeft(const MyBox2f& box0, const MyBox2f& box1){
 }
 
 MyBox2f MySegNodeInfoLayout2D::ComputeBox(const MySegmentNode* seg) const{
-	float boxWidth = 0.05;
+	float boxWidth = mBaseBoxWidth;
 	if (mBoxStatus){
 		if (mBoxStatus->HasKey(seg)){
 			MyObjectStatus status = mBoxStatus->at(seg);
 			if (status.IsBitSet(MyObjectStatus::STATUS_DISABLE_BIT)){
-				boxWidth = 0.005;
+				boxWidth = mSmallBoxWidth;
 			}
 		}
 	}
-	float maxTScoreHeight = 0.2f;
+	float maxTScoreHeight = mTScoreBoxHeight;
 	MyVec2f tScoreRange = mSegAsmGroup->GetTScoreRange();
 	float tScoreRangeAbs = max(fabs(tScoreRange[0]), fabs(tScoreRange[1]));
 	float tScore = mSegAsmGroup->GetTScores().at(seg);
 	float tScoreHeight = fabs(tScore) / tScoreRangeAbs * maxTScoreHeight;
-	MyVec2f lowPos(0, 0.4);
-	MyVec2f highPos = lowPos + MyVec2f(boxWidth, 0.2f + tScoreHeight);
+	MyVec2f lowPos(0, mBaseBoxVerticalRange[0]);
+	MyVec2f highPos(boxWidth, mBaseBoxVerticalRange[1] + tScoreHeight);
 	return MyBox2f(lowPos, highPos);
 }

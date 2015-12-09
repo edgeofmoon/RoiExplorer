@@ -30,12 +30,12 @@ public:
 	void SetMySegsPlanarDrawer(MySegsPlanarDrawerSPtr drawer){
 		mRoiDrawer = drawer;
 	}
-	MySegsPlanarDrawerSPtr GetRoiDrawer(){
+	MySegsPlanarDrawerSPtr GetRoiDrawer() const {
 		return mRoiDrawer;
 	}
 
-	Signal1< const MySegmentNode* > Signal_SegmentSelected;
-	Signal1< const MySegmentNode* > Signal_SegmentUnselected;
+	Signal1< MyVec4i > Signal_SegmentSelected;
+	Signal1< MyVec4i > Signal_SegmentUnselected;
 
 protected:
 	MySegsPlanarDrawerSPtr mRoiDrawer;

@@ -29,7 +29,30 @@ public:
 	MyMapScPtr<const MySegmentNode*, MyBox2f> GetBoxesOut() const{
 		return mBoxesOut;
 	}
-
+	void SetBaseBoxVerticalRange(const MyVec2f& range){
+		mBaseBoxVerticalRange = range;
+	}
+	const MyVec2f& GetBaseBoxVerticalRange() const{
+		return mBaseBoxVerticalRange;
+	}
+	void SetTScoreBoxHeight(float h){
+		mTScoreBoxHeight = h;
+	}
+	float GetTScoreBoxHeight() const{
+		return mTScoreBoxHeight;
+	}
+	void SetBaseBoxWidth(float w){
+		mBaseBoxWidth = w;
+	}
+	float GetBaseBoxWidth() const{
+		return mBaseBoxWidth;
+	}
+	void SetSmallBoxWidth(float w){
+		mSmallBoxWidth = w;
+	}
+	float GetSmallBoxWidth() const{
+		return mSmallBoxWidth;
+	}
 	void Update();
 
 protected:
@@ -37,6 +60,12 @@ protected:
 	MyMapScPtr<const MySegmentNode*, MyBox2f> mBoxesIn;
 	MyMapScPtr<const MySegmentNode*, MyObjectStatus> mBoxStatus;
 	MySegmentAssembleGroupScPtr mSegAsmGroup;
+
+	// parameter
+	MyVec2f mBaseBoxVerticalRange;
+	float mTScoreBoxHeight;
+	float mBaseBoxWidth;
+	float mSmallBoxWidth;
 
 	// output layout
 	MyMapSPtr<const MySegmentNode*, MyBox2f> mBoxesOut;

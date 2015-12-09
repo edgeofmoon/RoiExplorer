@@ -14,7 +14,7 @@ public:
 	MySegsPlanarDrawer();
 	~MySegsPlanarDrawer();
 
-	void SetSegmentAssembleGroup(MySegmentAssembleGroupScPtr segAssembleGroup){
+	void SetSegmentAssembleGroup(MySegmentAssembleGroupSPtr segAssembleGroup){
 		mSegAssembleGroup = segAssembleGroup;
 	};
 
@@ -24,7 +24,7 @@ public:
 	void SetLayout(MySegNodeInfoLayout2DSPtr layout){
 		mLayoutManager = layout;
 	}
-	MySegmentAssembleGroupScPtr GetSegmentAssembleGroup(){
+	MySegmentAssembleGroupSPtr GetSegmentAssembleGroup(){
 		return mSegAssembleGroup;
 	};
 
@@ -34,7 +34,7 @@ public:
 	MyLabelManagerSPtr GetLabelManager(){
 		return mLabelManager;
 	}
-	MySegNodeInfoLayout2DSPtr GetLayoutManager(){
+	MySegNodeInfoLayout2DSPtr GetLayoutManager() const {
 		return mLayoutManager;
 	}
 	MySegTrkNetworkSPtr GetNetwork(){
@@ -50,6 +50,9 @@ public:
 	void SetSegNodeColor(MyMapScPtr<const MySegmentNode*, MyVec4f> color){
 		mSegNodeColor = color;
 	};
+	MyMapScPtr<const MySegmentNode*, MyVec4f> GetSegNodeColor() const{
+		return mSegNodeColor;
+	}
 	void Update();
 
 	void Render();
@@ -59,7 +62,7 @@ protected:
 	MyLabelManagerSPtr mLabelManager;
 	MySegNodeInfoLayout2DSPtr mLayoutManager;
 
-	MySegmentAssembleGroupScPtr mSegAssembleGroup;
+	MySegmentAssembleGroupSPtr mSegAssembleGroup;
 	MySegTrkNetworkSPtr mSegTrkNetwork;
 
 	MyMapScPtr<const MySegmentNode*, MyVec4f> mSegNodeColor;

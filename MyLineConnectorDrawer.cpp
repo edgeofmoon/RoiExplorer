@@ -90,7 +90,6 @@ void MyLineConnectorDrawer::Render(){
 	MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr
 		= roiBoxes->begin();
 
-	float joinTreeBottom = mJoinTreeView->GetLowPos()[1] / (float)mViewport.GetSize(1);
 	while (itr != roiBoxes->end()){
 		if (mRoiView->IsDisable(itr->first)) {
 			itr++;
@@ -176,7 +175,8 @@ void MyLineConnectorDrawer::RenderConnectorLine(
 	// make curves
 	MyBox2f roiBox = this->ComputeRoiViewBox(mRoiLayout->GetSegmentPosition(roi));
 	MyBox2f segBox = this->ComputeJoinTreeViewBox(mJoinTreeLayout->GetPosition(seg));
-	float joinTreeBottom = mJoinTreeView->GetLowPos()[1] / (float)mViewport.GetSize(1);
+	float joinTreeBottom = (mJoinTreeView->GetLowPos()[1] - mViewport.GetLowPos()[1])
+		/ (float)mViewport.GetSize(1);
 	MyArray2f ctrPoints;
 	if (IsOnCenterBranch(seg)){
 		MyVec2f dir = roiBox.GetCenter() - segBox.GetCenter();

@@ -59,7 +59,7 @@ void MyApp::Init(){
 	MyVolumeSegmenterTemplate segmenter;
 	segmenter.SetVolumeData(labelVol);
 	MyArraySPtr<MySegmentNodeSPtr> ROIs = segmenter.MakeSegments();
-	ROIs->resize(5);
+	//ROIs->resize(5);
 	cout << timer.GetElapsed() << " seconds to read ROIs.\n";
 	timer.Restart();
 	// control cohort
@@ -77,11 +77,11 @@ void MyApp::Init(){
 		<< segAsmb_scz->GetSegmentNodeInfos()->front()->GetVolumes()->size() << " scz cohort\n";
 	timer.Restart();
 	// group
-	mAsmbGroup = make_shared<MySegmentAssembleGroup>();
-	mAsmbGroup->PushBack(segAsmb_control);
-	mAsmbGroup->PushBack(segAsmb_scz);
-	mAsmbGroup->Update();
-	MyMapScPtr<const MySegmentNode*, MyVec4f> ROI_color = mAsmbGroup->GetRoiColors();
+	MySegmentAssembleGroupSPtr asmbGroup = make_shared<MySegmentAssembleGroup>();
+	asmbGroup->PushBack(segAsmb_control);
+	asmbGroup->PushBack(segAsmb_scz);
+	asmbGroup->Update();
+	MyMapScPtr<const MySegmentNode*, MyVec4f> ROI_color = asmbGroup->GetRoiColors();
 	cout << timer.GetElapsed() << " seconds to construct assemble group.\n";
 	timer.Restart();
 
@@ -163,7 +163,6 @@ void MyApp::Init(){
 
 	// 2. roi view
 	MyMapSPtr<int, MyString> labels = MyDataReader::LoadRegionLabel("GOBS_look_up_table.txt");
-
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ctr_10.trk");
 	MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
@@ -177,11 +176,11 @@ void MyApp::Init(){
 	timer.Restart();
 	MySegNodeInfoLayout2DSPtr seglayout = std::make_shared<MySegNodeInfoLayout2D>();
 	seglayout->SetBoxesIn(segAsmb_control->GetSegment2DBoxes());
-	seglayout->SetSegmentAssembleGroup(mAsmbGroup);
+	seglayout->SetSegmentAssembleGroup(asmbGroup);
 	seglayout->Update();
 	MySegsPlanarDrawerSPtr segsDrawer = make_shared<MySegsPlanarDrawer>();
 	segsDrawer->SetLayout(seglayout);
-	segsDrawer->SetSegmentAssembleGroup(mAsmbGroup);
+	segsDrawer->SetSegmentAssembleGroup(asmbGroup);
 	segsDrawer->SetSegTrkNetwork(network);
 	segsDrawer->GetLabelManager()->SetFont(font);
 	segsDrawer->SetLabels(labels);

@@ -15,7 +15,7 @@ public:
 	virtual ~MyPolyline(){};
 
 	void Clear();
-	void Append(const MyVec<T, n>& point);
+	MyPolyline<T, n>& Append(const MyVec<T, n>& point);
 
 	void SetLine(const MyArray<MyVec<T,n>>& ctlPoints);
 	void SetLoop(bool loop = true);
@@ -59,12 +59,13 @@ void MyPolyline<T, n>::Clear(){
 }
 
 template<typename T, int n>
-void MyPolyline<T, n>::Append(const MyVec<T, n>& point){
+MyPolyline<T, n>& MyPolyline<T, n>::Append(const MyVec<T, n>& point){
 	mVertices << point;
 	if (mVertices.size() == 1){
 		this->UpdateBoundingBox();
 	}
 	else mBoundingBox.Engulf(point);
+	return *this;
 }
 
 template<typename T, int n>

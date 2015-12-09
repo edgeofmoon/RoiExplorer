@@ -126,7 +126,7 @@ int MyRoiView::HandleMouseBottonEvent(int button, int state, int x, int y){
 			const MySegmentNode* roi = this->ComputeSegmentNodeAt(MyVec2i(x, y));
 			if (roi){
 				this->UnsetSelect(roi);
-				this->Signal_SegmentUnselected(roi);
+				this->Signal_SegmentUnselected(this->GetSegmentNodeName(roi));
 			}
 			else this->UnselectAll();
 			mMouseAction = Action_None;
@@ -182,7 +182,7 @@ void MyRoiView::UpdateLastBrushedBoxes(){
 		if (this->IsSelected(itr->first)) continue;
 		else if (MyMathHelper::IsIntersected(itr->second, line)){
 			this->SetSelect(itr->first);
-			this->Signal_SegmentSelected(itr->first);
+			this->Signal_SegmentSelected(this->GetSegmentNodeName(itr->first));
 		}
 	}
 }
@@ -195,7 +195,7 @@ void MyRoiView::UnselectAll(){
 		if (!this->IsSelected(itr->first)) continue;
 		else {
 			this->UnsetSelect(itr->first);
-			this->Signal_SegmentUnselected(itr->first);
+			this->Signal_SegmentUnselected(this->GetSegmentNodeName(itr->first));
 		}
 	}
 }
@@ -213,7 +213,7 @@ void MyRoiView::RenderBrushLine(){
 }
 
 void MyRoiView::RenderFrame(){
-	MyVec2f boxRange_Y(0.4, 0.6);
+	MyVec2f boxRange_Y = mRoiDrawer->GetLayoutManager()->GetBaseBoxVerticalRange();
 	float boarder_x = 0.00001;
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();

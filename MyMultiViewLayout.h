@@ -15,15 +15,20 @@ public:
 	void SetGlobalViewport(const MyBox2i& viewport){
 		mGlobalViewport = viewport;
 	}
+	void SetNumberOfViews(int nView){
+		mNumberViews = nView;
+	}
 
 	const MyBox2i& GetViewport(int index) const{
 		return mViewports.at(index);
 	}
 
 	int GetViewportIndex(const MyVec2i& pos) const;
+
 protected:
 	MyMap<int, MyBox2i> mViewports;
 	MyBox2i mGlobalViewport;
+	int mNumberViews;
 
 	MyBox2i CutBox(const MyBox2i& box, int iDim, 
 		float startRatio, float endRatio) const;

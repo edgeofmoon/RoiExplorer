@@ -69,16 +69,16 @@ void MySegsPlanarDrawer::DrawNetwork(){
 					MyVec2f fromAnchor;
 					MyVec2f toAnchor;
 					if (boxes->at(iNode).GetLowPos()[0] < boxes->at(jNode).GetLowPos()[0]){
-						fromAnchor = MyVec2f(boxes->at(iNode).GetCenter()[0], boxes->at(iNode).GetHighPos()[1]);
-						toAnchor = MyVec2f(boxes->at(jNode).GetCenter()[0], boxes->at(jNode).GetHighPos()[1]);
+						//fromAnchor = MyVec2f(boxes->at(iNode).GetCenter()[0], boxes->at(iNode).GetHighPos()[1]);
+						//toAnchor = MyVec2f(boxes->at(jNode).GetCenter()[0], boxes->at(jNode).GetHighPos()[1]);
+						toAnchor = MyVec2f(boxes->at(iNode).GetCenter()[0], boxes->at(iNode).GetLowPos()[1]);
+						fromAnchor = MyVec2f(boxes->at(jNode).GetCenter()[0], boxes->at(jNode).GetLowPos()[1]);
 					}
 					else{
 						fromAnchor = MyVec2f(boxes->at(iNode).GetCenter()[0], boxes->at(iNode).GetLowPos()[1]);
 						toAnchor = MyVec2f(boxes->at(jNode).GetCenter()[0], boxes->at(jNode).GetLowPos()[1]);
-						DrawArrow(fromAnchor, toAnchor, color, MyVec4i(iIdx, jIdx, iIdx, jIdx), 0);
 					}
-					//DrawArrowBoundary(fromAnchor, toAnchor, color, MyVec4i(iIdx, jIdx, iIdx, jIdx), ratio / 1000);
-					//DrawArrowBoundary(fromAnchor, toAnchor, color, MyVec4i(iIdx, jIdx, iIdx, jIdx), 0);
+					DrawArrow(fromAnchor, toAnchor, color, MyVec4i(iIdx, jIdx, iIdx, jIdx), 0);
 				}
 			}
 		}
@@ -142,7 +142,8 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 
 	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i <= numStep; i++){
-		glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
+		//glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
+		glColor4f(color[0], color[1], color[2], 1.f);
 		float angle = startAngle + i*delAngle;
 		float halfWidth = (startWidth + i*delWidth) / 2;
 		MyVec2f leftPos(center[0] + cos(angle)*(radius - halfWidth),
@@ -150,7 +151,8 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 		MyGraphicsTool::Vertex(leftPos);
 	}
 	for (int i = numStep; i >= 0; i--){
-		glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
+		//glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
+		glColor4f(color[0], color[1], color[2], 1.f);
 		float angle = startAngle + i*delAngle;
 		float halfWidth = (startWidth + i*delWidth) / 2;
 		MyVec2f RightPos(center[0] + cos(angle)*(radius + halfWidth),
@@ -222,6 +224,8 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		glEnd();
 
 		// draw text
+		// a hack: here small width means the roi is disabled
+		if (theBox.GetSize(0) < 0.01) continue;
 		glColor4f(0, 0, 0, 1);
 		float tScore = mSegAssembleGroup->GetTScores().at(node);
 		MyString tStr(tScore);

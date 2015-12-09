@@ -18,8 +18,9 @@ MyApp::~MyApp()
 
 void MyApp::Render(){
 	for (int i = 0; i < this->GetNumberViews(); i++){
-		this->GetView(i)->Render();
+		if(this->GetView(i)) this->GetView(i)->Render();
 	}
+	mRoiConnectorDrawer.Render();
 }
 
 int MyApp::HandleKeyboardEvent(unsigned char key, int x, int y){
@@ -36,16 +37,25 @@ int MyApp::HandleKeyboardEvent(unsigned char key, int x, int y){
 	case 'd':
 	case 'D':
 		//return this->RemoveRoi();
-		return this->DisableRoi();
+		this->DisableRoi(mRoiView);
+		this->DisableRoi(mSecondRoiView);
+		return 1;
 		break;
 	case 'e':
 	case 'E':
-		return this->EnableRoi();
+		this->EnableRoi(mRoiView);
+		this->EnableRoi(mSecondRoiView);
+		return 1;
 		break;
 	case 'g':
 	case 'G':
 		cout << "Update cohorts...\n";
 		return this->UpdateAssembleGroup();
+		break;
+	case 'a':
+	case 'A':
+		cout << "adding cohorts...\n";
+		return this->AddAssembleGroup();
 		break;
 	case 'j':
 	case 'J':
@@ -64,9 +74,9 @@ int MyApp::HandleMouseBottonEvent(int button, int state, int x, int y){
 			if (this->RemoveIsosurface(x, y)){
 				cout << "Remove Join Tree Surface.\n";
 			}
-			if (this->RemoveRoisurface(x, y)){
-				cout << "Remove Roi Surface.\n";
-			}
+			//if (this->RemoveRoisurface(x, y)){
+			//	cout << "Remove Roi Surface.\n";
+			//}
 			if (this->RemoveSurface(x, y)){
 				cout << "Remove 3D Surface.\n";
 			}
@@ -75,9 +85,9 @@ int MyApp::HandleMouseBottonEvent(int button, int state, int x, int y){
 			if (this->UpdateIsosurface(x, y)){
 				cout << "Update Join Tree Surface.\n";
 			}
-			if (this->UpdateRoiSurface(x, y)){
-				cout << "Update Roi Surface.\n";
-			}
+			//if (this->UpdateRoiSurface(x, y)){
+			//	cout << "Update Roi Surface.\n";
+			//}
 		}
 		int viewIdx = mViewLayout->GetViewportIndex(MyVec2i(x, y));
 		mFocusView = this->GetView(viewIdx);
@@ -120,16 +130,7 @@ int MyApp::HandleMouseMoveEvent(int x, int y){
 
 int MyApp::HandleResizeEvent(){
 	mViewLayout->SetGlobalViewport(*this);
-	mViewLayout->Update();
-	mSpatialView->Set(mViewLayout->GetViewport(0));
-	mSpatialView->HandleResizeEvent();
-	mJoinTreeView->Set(mViewLayout->GetViewport(1));
-	mJoinTreeView->HandleResizeEvent();
-	mRoiView->Set(mViewLayout->GetViewport(2));
-	mRoiView->HandleResizeEvent();
-	mConnectorView->SetViewports(mViewLayout->GetViewport(1), 
-		mViewLayout->GetViewport(2));
-	mConnectorView->HandleResizeEvent();
+	this->UpdateLayout();
 	return 1;
 }
 
@@ -138,6 +139,26 @@ int MyApp::HandleIdleEvent(){
 		this->GetView(i)->HandleIdleEvent();
 	}
 	return 1;
+}
+
+void MyApp::UpdateLayout(){
+	int numViews = 3;
+	if (mSecondRoiView) numViews++;
+	mViewLayout->SetNumberOfViews(numViews);
+	mViewLayout->Update();
+	mSpatialView->Set(mViewLayout->GetViewport(0));
+	mSpatialView->HandleResizeEvent();
+	mJoinTreeView->Set(mViewLayout->GetViewport(1));
+	mJoinTreeView->HandleResizeEvent();
+	mRoiView->Set(mViewLayout->GetViewport(2));
+	mRoiView->HandleResizeEvent();
+	if (mSecondRoiView){
+		mSecondRoiView->Set(mViewLayout->GetViewport(3));
+		mSecondRoiView->HandleResizeEvent();
+	}
+	mConnectorView->SetViewports(mViewLayout->GetViewport(1),
+		mViewLayout->GetViewport(2));
+	mConnectorView->HandleResizeEvent();
 }
 
 MyView* MyApp::GetView(int idx){
@@ -153,6 +174,9 @@ MyView* MyApp::GetView(int idx){
 		return mRoiView.get();
 		break;
 	case 3:
+		return mSecondRoiView.get();
+		break;
+	case 4:
 		return mConnectorView.get();
 		break;
 	default:
@@ -163,5 +187,5 @@ MyView* MyApp::GetView(int idx){
 }
 int MyApp::GetNumberViews() const{
 	//return 3;
-	return 4;
+	return 5;
 }

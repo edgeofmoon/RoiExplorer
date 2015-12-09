@@ -36,8 +36,8 @@ void MyJoinTreeView::Render(){
 	glPushMatrix();
 	glLoadIdentity();
 	mJoinTreeDrawer->Render();
-	//mBloomDrawer->Render();
-	//mStatisticsDrawer->Render();
+	mBloomDrawer->Render();
+	mStatisticsDrawer->Render();
 	RenderMarks();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

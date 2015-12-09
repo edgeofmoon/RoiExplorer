@@ -36,9 +36,6 @@
     <Filter Include="Header Files\ContourTree">
       <UniqueIdentifier>{7964b4e6-e847-4f56-9f29-3835d54b4365}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Segments">
-      <UniqueIdentifier>{e217c4f7-5e0d-4854-b592-cb288b737d95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\BubbleSets">
       <UniqueIdentifier>{bdab9cf7-d5ca-48a8-a92e-3f834785a5d5}</UniqueIdentifier>
     </Filter>
@@ -62,6 +59,9 @@
     </Filter>
     <Filter Include="Source Files\Others">
       <UniqueIdentifier>{c8b50531-8131-4755-afd0-6c30d5ee6eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Segments">
+      <UniqueIdentifier>{e217c4f7-5e0d-4854-b592-cb288b737d95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,9 +241,6 @@
     </ClCompile>
     <ClCompile Include="MyLibs\OSCB.cpp">
       <Filter>Legacy\MyLibs</Filter>
-    </ClCompile>
-    <ClCompile Include="MyVoxContainer.h">
-      <Filter>Header Files\Segments</Filter>
     </ClCompile>
     <ClCompile Include="MyBubbleSetsDrawingHelper.cpp">
       <Filter>Source Files\BubbleSets</Filter>
@@ -467,6 +464,12 @@
     <ClCompile Include="MyLabelManager_old.cpp">
       <Filter>Source Files\Others</Filter>
     </ClCompile>
+    <ClCompile Include="MyVoxContainer.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRoiViewConnectorDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyLibs\MyArray.h">
@@ -664,48 +667,6 @@
     <ClInclude Include="MyJoinTreeROI.h">
       <Filter>Header Files\ContourTree</Filter>
     </ClInclude>
-    <ClInclude Include="MySegmentNode.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegmentNodeInfo.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegmentNodeMatch.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegmentNodeMatchCounter.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegNodeInfoAssemble.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegNodeInfoEncoder.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegNodeInfoEncoder2D.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegNodeInfoLayout2D.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVoxContainer_header.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVolumeSegmenterVox.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVolumeSegmenterTemplate.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVolSegVoxContourTree.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegTrkNetwork.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
-    <ClInclude Include="MySegmentAssembleGroup.h">
-      <Filter>Header Files\Segments</Filter>
-    </ClInclude>
     <ClInclude Include="MyLineConnectorDrawer.h">
       <Filter>Header Files\Renderers</Filter>
     </ClInclude>
@@ -825,6 +786,51 @@
     </ClInclude>
     <ClInclude Include="MyFont.h">
       <Filter>Header Files\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVoxContainer_header.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentAssembleGroup.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNode.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeInfo.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeMatch.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegmentNodeMatchCounter.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoAssemble.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoEncoder.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoEncoder2D.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegNodeInfoLayout2D.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MySegTrkNetwork.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolSegVoxContourTree.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumeSegmenterTemplate.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVolumeSegmenterVox.h">
+      <Filter>Header Files\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRoiViewConnectorDrawer.h">
+      <Filter>Header Files\Renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

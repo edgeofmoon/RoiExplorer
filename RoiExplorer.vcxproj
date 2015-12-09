@@ -183,6 +183,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="MyRoiViewConnectorDrawer.cpp" />
     <ClCompile Include="MyApp_base.cpp" />
     <ClCompile Include="MyApp_init.cpp" />
     <ClCompile Include="MyApp_interactions.cpp" />
@@ -408,6 +409,7 @@
     <ClInclude Include="HeightField\PriorityIndex.h" />
     <ClInclude Include="HeightField\Superarc.h" />
     <ClInclude Include="HeightField\Supernode.h" />
+    <ClInclude Include="MyRoiViewConnectorDrawer.h" />
     <ClInclude Include="MyApp.h" />
     <ClInclude Include="MyBloomDrawingHelper.h" />
     <ClInclude Include="MyConnectorView.h" />

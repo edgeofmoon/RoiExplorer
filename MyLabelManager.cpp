@@ -39,6 +39,11 @@ void MyLabelManager::Update(){
 void MyLabelManager::Render(){
 	MyMap<const MySegmentNode*, MyBox2f>::const_iterator itr = mBoxes->begin();
 	while (itr != mBoxes->end()){
+		// a hack: here small width means the roi is disabled
+		if (itr->second.GetSize(0) < 0.01) {
+			itr++;
+			continue;
+		}
 		int index = itr->first->GetIndex();
 		if (mLabels->HasKey(index)){
 			MyString label;
@@ -46,7 +51,7 @@ void MyLabelManager::Render(){
 			else label = "R" + index;
 			MyVec2i labelSize = mFont->ComputeSizeInPixel(label);
 			float heightWidthRatio = labelSize[1] / (float)labelSize[0];
-			MyVec2f bl(itr->second.GetLowPos()[0], itr->second.GetHighPos()[1]);
+			MyVec2f bl(itr->second.GetLowPos()[0], itr->second.GetHighPos()[1] + 0.01);
 			//MyVec2f tr(itr->second.GetHighPos()[0], itr->second.GetHighPos()[1]
 			//	+ heightWidthRatio*itr->second.GetSize(0));
 			MyVec2f tr(itr->second.GetHighPos()[0], itr->second.GetHighPos()[1]
