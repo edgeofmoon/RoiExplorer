@@ -17,6 +17,7 @@ public:
 	static MyMapSPtr<int, MyString> LoadRegionLabel(const char* fn);
 
 	static MySegNodeInfoAssembleSPtr ConstructAssembleFromDirectory(
-		const char* folderStr, const MyArray<MySegmentNodeSPtr>* ROIs);
+		const char* folderStr, const MyArray<MySegmentNodeSPtr>* ROIs,
+		int maxRead = INT_MAX);
 };
 

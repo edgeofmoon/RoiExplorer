@@ -43,6 +43,8 @@
 using namespace std;
 
 void MyApp::Init(){
+	//mAsmbVolLimit = INT_MAX;
+	//mAsmbVolLimit = 3;
 	MyVec4i GlobalViewport(0, 0, 1920, 1000);
 	float isoValue = 0.5;
 	MyTimer timer;
@@ -50,7 +52,8 @@ void MyApp::Init(){
 	MyUiPanel::InitGL(GlobalViewport[2], GlobalViewport[3]);
 	// font
 	MyFontSPtr font = std::make_shared<MyFont>();
-	font->Load("fonts\\Vera.ttf", 16);
+	//font->Load("fonts\\Vera.ttf", 16);
+	font->Load("fonts\\Sansita-Regular.otf", 16);
 	// Roi
 	My3dArrayfSPtr vol = MyDataReader::LoadVolumeFromFile("target_div10000.nii.gz");
 	//My3dArrayfSPtr vol = MyDataReader::LoadVolumeFromFile("controlAverage.nii.gz");
@@ -65,14 +68,14 @@ void MyApp::Init(){
 	// control cohort
 	string folderStr = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\control\\";
 	MySegNodeInfoAssembleSPtr segAsmb_control
-		= MyDataReader::ConstructAssembleFromDirectory(folderStr.c_str(), ROIs.get());
+		= MyDataReader::ConstructAssembleFromDirectory(folderStr.c_str(), ROIs.get(), mAsmbVolLimit);
 	cout << timer.GetElapsed() << " seconds to construct "
 		<< segAsmb_control->GetSegmentNodeInfos()->front()->GetVolumes()->size() << " control cohort\n";
 	timer.Restart();
 	// scz cohort
 	string folderStr1 = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\scz\\";
 	MySegNodeInfoAssembleSPtr segAsmb_scz
-		= MyDataReader::ConstructAssembleFromDirectory(folderStr1.c_str(), ROIs.get());
+		= MyDataReader::ConstructAssembleFromDirectory(folderStr1.c_str(), ROIs.get(), mAsmbVolLimit);
 	cout << timer.GetElapsed() << " seconds to construct "
 		<< segAsmb_scz->GetSegmentNodeInfos()->front()->GetVolumes()->size() << " scz cohort\n";
 	timer.Restart();
@@ -105,6 +108,7 @@ void MyApp::Init(){
 	cout << "Mesh Shader " << meshShader << " compiled.\n";
 	meshRenderer->SetGeometry(&mesh0.GetVertices(), &mesh0.GetNormals(), &mesh0.GetTriangles());
 	meshRenderer->SetName(MyVec4i(99, 99, 99, 0));
+	meshRenderer->SetTransparency(5);
 	meshRenderer->Update();
 	mSpatialView = std::make_shared<MySpatialView>();
 	mSpatialView->SetMeshRenderer(meshRenderer);
@@ -164,8 +168,8 @@ void MyApp::Init(){
 	// 2. roi view
 	MyMapSPtr<int, MyString> labels = MyDataReader::LoadRegionLabel("GOBS_look_up_table.txt");
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ctr_10.trk");
-	MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
-	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
+	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
+	MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
 	cout << timer.GetElapsed() << " seconds to read tracks.\n";
 	timer.Restart();
 	MySegTrkNetworkSPtr network = std::make_shared<MySegTrkNetwork>();
@@ -201,6 +205,7 @@ void MyApp::Init(){
 	connectDrawer->SetJoinTreeView(mJoinTreeView);
 	connectDrawer->SetRoiView(mRoiView);
 	connectDrawer->SetRoiColors(ROI_color);
+	connectDrawer->SetFont(font);
 	mConnectorView = std::make_shared<MyConnectorView>();
 	mConnectorView->SetConnectorDrawer(connectDrawer);
 	mConnectorView->SetIndex(3);

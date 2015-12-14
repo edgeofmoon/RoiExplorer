@@ -55,6 +55,17 @@ MyVoxContainerfSPtr MySegmentNode::MakeAllVoxes() const{
 	return MyVoxContainerf::MakeVoxContainer(&voxIndices, &voxValues, mVolumeSize);
 }
 
+void MySegmentNode::UpdateDescendantTotalVoxelCount(){
+	mTotalVoxels = 0;
+	if (mUniqueVoxes){
+		mTotalVoxels = mUniqueVoxes->GetNumVoxes();
+	}
+	for (int i = 0; i < this->GetNumChildren(); i++){
+		this->GetChild(i)->UpdateDescendantTotalVoxelCount();
+		mTotalVoxels += this->GetChild(i)->GetNumTotalVoxes();
+	}
+}
+
 void MySegmentNode::SetUniqueVoxes(MyVoxContainerfSPtr voxel){
 	if (mUniqueVoxes){
 		mTotalVoxels -= mUniqueVoxes->GetNumVoxes();

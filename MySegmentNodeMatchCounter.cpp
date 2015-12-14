@@ -103,5 +103,7 @@ int MySegmentNodeMatchCounter::CountMatch(
 	const MySegmentNode* seg0, const MySegmentNode* seg1){
 	MyVoxContainerfScPtr voxels0 = seg0->GetUniqueVoxes();
 	MyVoxContainerfScPtr voxels1 = seg1->GetUniqueVoxes();
+	//MyVoxContainerfScPtr voxels0 = seg0->MakeAllVoxes();
+	//MyVoxContainerfScPtr voxels1 = seg1->MakeAllVoxes();
 	return MyVoxContainerf::CountOverlapping(voxels0.get(), voxels1.get());
 }

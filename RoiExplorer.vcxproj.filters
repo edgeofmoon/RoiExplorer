@@ -380,9 +380,6 @@
     <ClCompile Include="MyTracks.cpp">
       <Filter>Source Files\Others</Filter>
     </ClCompile>
-    <ClCompile Include="MyUiPanel.cpp">
-      <Filter>Source Files\Others</Filter>
-    </ClCompile>
     <ClCompile Include="MyMultiViewLayout.cpp">
       <Filter>Source Files\Renderers</Filter>
     </ClCompile>
@@ -468,6 +465,12 @@
       <Filter>Header Files\Segments</Filter>
     </ClCompile>
     <ClCompile Include="MyRoiViewConnectorDrawer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="testJoinTreeBubble.cpp">
+      <Filter>Source Files\Testers</Filter>
+    </ClCompile>
+    <ClCompile Include="MyUiPanel.cpp">
       <Filter>Source Files\Renderers</Filter>
     </ClCompile>
   </ItemGroup>

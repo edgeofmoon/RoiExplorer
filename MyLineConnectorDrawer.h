@@ -6,6 +6,7 @@
 #include "MyJoinTreeView.h"
 #include "MyRoiView.h"
 #include "MySharedPointer.h"
+#include "MyFont.h"
 
 class MyLineConnectorDrawer
 {
@@ -48,9 +49,11 @@ public:
 		return mMatchCounter;
 	}
 
+	void SetFont(MyFontScPtr font){ mFont = font; };
+	MyFontScPtr GetFont() const{ return mFont; };
 protected:
 	float mMatchDrawThreshold;
-
+	MyFontScPtr mFont;
 	MyJoinTreeLayoutScPtr mJoinTreeLayout;
 	//MyVec2f mJoinTreeLayoutOffset;
 	MyJoinTreeViewScPtr mJoinTreeView;
@@ -72,6 +75,14 @@ protected:
 
 	// drawing helper
 	void RenderConnectorLine(const MySegmentNode* roi, const MySegmentNode* seg);
+	void RenderLabel(const MyMap<const MySegmentNode*, const MySegmentNode*>& matchToDraw);
+	void RenderBoxConnectingLine(const MyBox2f& box0, const MyBox2f& box1);
+
+	// helper to located best suited arc
+	float ComputeMatchIndex(const MySegmentNode* node0, 
+		const MySegmentNode* node1, int numVoxelMatch) const;
+	const MySegmentNode* FindBestNode(const MySegmentNode* node,
+		const MySegmentNode* localMatch) const;
 };
 
 typedef MySharedPointer<MyLineConnectorDrawer> MyLineConnectorDrawerSPtr;

@@ -25,7 +25,7 @@ void main(){
 	fragColour = vec4(1,1,1,1);
 	fragColour = fragColour*(ambient+diffusion);
 	//fragColour += vec4(specular,specular,specular,0);
-	//fragColour.a = pow((1-abs(dot(normal,eyeDir))),transExp);
-	fragColour.a = pow((1-abs(dot(normal,eyeDir))),5);
+	fragColour.a = pow((1-abs(dot(normal,eyeDir))),transExp);
+	//fragColour.a = pow((1-abs(dot(normal,eyeDir))),5);
 	outName = name;
 }

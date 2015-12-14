@@ -47,6 +47,8 @@ public:
 
 	void SetLinkDrawThreshold(float thres){ mLinkDrawThreshold = thres; };
 
+	float GetLinkDrawThreshold(){ return mLinkDrawThreshold; };
+
 	void SetSegNodeColor(MyMapScPtr<const MySegmentNode*, MyVec4f> color){
 		mSegNodeColor = color;
 	};

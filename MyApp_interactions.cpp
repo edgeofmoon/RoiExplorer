@@ -2,7 +2,7 @@
 #include "MyIsosurfaceTracker.h"
 #include "OSCB.h"
 #include "MyDataReader.h"
-
+#include "MyMathHelper.h"
 //debug
 #include <iostream>
 using namespace std;
@@ -289,6 +289,10 @@ int MyApp::EnableRoi(MyRoiViewSPtr roiView){
 			// any number slightly higher than 0 
 			// and lower than min will do
 			tracker.SetIsovalue(0.0001f);
+			// smooth it, no use now
+			//My3dArrayfSPtr smoothVol(MyMathHelper::MakeGaussianFilter(vol.get(), 5));
+			//tracker.SetVolumn(smoothVol);
+			//tracker.SetIsovalue(0.1f);
 			tracker.Update();
 			MyVec4f color = roiView->GetRoiDrawer()->
 				GetSegmentAssembleGroup()->GetRoiColors()->at(itr->first);
@@ -318,21 +322,26 @@ int MyApp::EnableRoi(MyRoiViewSPtr roiView){
 	return 0;
 }
 
+int MyApp::ClearJoinTreeSurfaces(){
+	const MyMap<const MySegmentNode*, float>& marks
+		= mJoinTreeView->GetMarks();;
+	MyMap<const MySegmentNode*, float>::const_iterator itr;
+	for (itr = marks.begin(); itr != marks.end();){
+		MyVec4i name = mJoinTreeView->GetSegmentNodeName(itr->first);
+		MySurfaceRendererSPtr renderer
+			= mSpatialView->GetSurfaceRendererByName(name);
+		mSpatialView->RemoveSurfaceRenderer(renderer);
+		mJoinTreeView->RemoveMarks(itr++->first);
+	}
+	return 1;
+}
+
 int MyApp::UpdateJoinTree(){
 	OSCB::OpenFileDialog* openFileDialog = new OSCB::OpenFileDialog();
 	openFileDialog->Flags |= OFN_NOCHANGEDIR;
 	if (openFileDialog->ShowDialog()){
 		// first remove isosurface in spatial view
-		const MyMap<const MySegmentNode*, float>& marks 
-			= mJoinTreeView->GetMarks();;
-		MyMap<const MySegmentNode*, float>::const_iterator itr;
-		for (itr = marks.begin(); itr != marks.end(); ){
-			MyVec4i name = mJoinTreeView->GetSegmentNodeName(itr->first);
-			MySurfaceRendererSPtr renderer 
-				= mSpatialView->GetSurfaceRendererByName(name);
-			mSpatialView->RemoveSurfaceRenderer(renderer);
-			mJoinTreeView->RemoveMarks(itr++->first);
-		}
+		this->ClearJoinTreeSurfaces();
 		// build new join tree view
 		char DefChar = ' ';
 		char ch[260];
@@ -385,9 +394,9 @@ int MyApp::UpdateAssembleGroup(){
 			ROIs << segInfos->at(i)->GetSegmentNode();
 		}
 		MySegNodeInfoAssembleSPtr segAsmb_control
-			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs);
+			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs, mAsmbVolLimit);
 		MySegNodeInfoAssembleSPtr segAsmb_scz
-			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs);
+			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs, mAsmbVolLimit);
 		mRoiView->GetRoiDrawer()->
 			GetSegmentAssembleGroup()->clear();
 		mRoiView->GetRoiDrawer()->
@@ -429,10 +438,15 @@ int MyApp::AddAssembleGroup(){
 		for (int i = 0; i < segInfos->size(); i++){
 			ROIs << segInfos->at(i)->GetSegmentNode();
 		}
+		// retive network
+		MySegTrkNetworkSPtr network = mRoiView->GetRoiDrawer()->GetNetwork();
+		if (mSecondRoiView) network = mSecondRoiView->GetRoiDrawer()->GetNetwork();
+
+		// build new view
 		MySegNodeInfoAssembleSPtr segAsmb_control
-			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs);
+			= MyDataReader::ConstructAssembleFromDirectory(path_ctr.c_str(), &ROIs, mAsmbVolLimit);
 		MySegNodeInfoAssembleSPtr segAsmb_scz
-			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs);
+			= MyDataReader::ConstructAssembleFromDirectory(path_scz.c_str(), &ROIs, mAsmbVolLimit);
 		MySegmentAssembleGroupSPtr asmbGroup = make_shared<MySegmentAssembleGroup>();
 		asmbGroup->PushBack(segAsmb_control);
 		asmbGroup->PushBack(segAsmb_scz);
@@ -440,17 +454,18 @@ int MyApp::AddAssembleGroup(){
 		MySegNodeInfoLayout2DSPtr seglayout = std::make_shared<MySegNodeInfoLayout2D>();
 		seglayout->SetBoxesIn(segAsmb_control->GetSegment2DBoxes());
 		seglayout->SetSegmentAssembleGroup(asmbGroup);
-		seglayout->SetBaseBoxVerticalRange(MyVec2f(0.5,0.7));
+		seglayout->SetBaseBoxVerticalRange(MyVec2f(0.3,0.65));
 		seglayout->Update();
 		MySegsPlanarDrawerSPtr segsDrawer = make_shared<MySegsPlanarDrawer>();
 		segsDrawer->SetLayout(seglayout);
 		segsDrawer->SetSegmentAssembleGroup(asmbGroup);
 		// transfer the network to here
-		segsDrawer->SetSegTrkNetwork(mRoiView->GetRoiDrawer()->GetNetwork());
+		segsDrawer->SetSegTrkNetwork(network);
 		mRoiView->GetRoiDrawer()->SetSegTrkNetwork(0);
 		segsDrawer->GetLabelManager()->SetFont(mRoiView->GetRoiDrawer()->GetLabelManager()->GetFont());
 		segsDrawer->SetLabels(mRoiView->GetRoiDrawer()->GetLabelManager()->GetLabels());
 		segsDrawer->SetSegNodeColor(asmbGroup->GetRoiColors());
+		segsDrawer->SetLinkDrawThreshold(mRoiView->GetRoiDrawer()->GetLinkDrawThreshold());
 		segsDrawer->Update();
 		mSecondRoiView = make_shared<MyRoiView>();
 		mSecondRoiView->SetMySegsPlanarDrawer(segsDrawer);

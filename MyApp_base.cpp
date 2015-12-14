@@ -9,6 +9,10 @@ MyApp::MyApp()
 {
 	mFocusView = 0;
 	mViewLayout = std::make_shared<MyMultiViewLayout>();
+	for (int i = 0; i < 6; i++){
+		mComponentVisible[i] = true;
+	}
+	mAsmbVolLimit = INT_MAX;
 }
 
 
@@ -18,9 +22,15 @@ MyApp::~MyApp()
 
 void MyApp::Render(){
 	for (int i = 0; i < this->GetNumberViews(); i++){
-		if(this->GetView(i)) this->GetView(i)->Render();
+		if (mComponentVisible[i]){
+			if (this->GetView(i)){
+				this->GetView(i)->Render();
+			}
+		}
 	}
-	mRoiConnectorDrawer.Render();
+	if (mComponentVisible[5]){
+		mRoiConnectorDrawer.Render();
+	}
 }
 
 int MyApp::HandleKeyboardEvent(unsigned char key, int x, int y){

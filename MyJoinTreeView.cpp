@@ -9,6 +9,9 @@ using namespace std;
 MyJoinTreeView::MyJoinTreeView()
 {
 	mClipBox.Set(MyVec2f(-0.02, -0.02), MyVec2f(1.02, 1.02));
+	for (int i = 0; i < 3; i++){
+		mComponentVisible[i] = true;
+	}
 }
 
 
@@ -35,9 +38,9 @@ void MyJoinTreeView::Render(){
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	mJoinTreeDrawer->Render();
-	mBloomDrawer->Render();
-	mStatisticsDrawer->Render();
+	if (mComponentVisible[0]) mJoinTreeDrawer->Render();
+	if (mComponentVisible[1]) mBloomDrawer->Render();
+	if (mComponentVisible[2]) mStatisticsDrawer->Render();
 	RenderMarks();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -53,6 +56,14 @@ void MyJoinTreeView::Render(){
 MyVec4i MyJoinTreeView::GetName(const MyVec2i& pixelPos) const{
 	const MySegmentNode* seg = this->ComputeSegmentNodeAt(pixelPos);
 	return this->GetSegmentNodeName(seg);
+}
+
+bool MyJoinTreeView::IsSegmentInView(const MySegmentNode* seg) const{
+	if (mJoinTreeDrawer->GetLayout()->GetPositions().HasKey(seg)){
+		const MyBox2f& box = mJoinTreeDrawer->GetLayout()->GetPosition(seg);
+		return box.IsIntersected(mClipBox);
+	}
+	return false;
 }
 
 MyVec2i MyJoinTreeView::ComputePixelPosition(const MyVec2f& geoPos) const{
@@ -134,14 +145,34 @@ int MyJoinTreeView::HandleResizeEvent(){
 }
 
 void MyJoinTreeView::RenderMarks() const{
-	glColor4f(0, 0, 0, 1);
-	glLineWidth(2);
 	MyMap<const MySegmentNode*, float>::const_iterator itr;
 	for (itr = mIsoMarks.begin(); itr != mIsoMarks.end(); itr++){
 		const MyBox2f& box = mJoinTreeDrawer->GetLayout()->GetPosition(itr->first);
+		glColor4f(0, 0, 0, 1);
+		glLineWidth(2);
 		glBegin(GL_LINES);
 		glVertex3f(box.GetLowPos()[0], itr->second, 0.99);
 		glVertex3f(box.GetHighPos()[0], itr->second, 0.99);
+		glEnd();
+
+		glLineWidth(3);
+		glColor4f(0, 0, 1, 1);
+		MyBox2f bbox(MyVec2f(box.GetLowPos()[0], itr->second - 0.02),
+			MyVec2f(box.GetHighPos()[0], itr->second + 0.02));
+		bbox.ScaleAtCenter(MyVec2f(1.2, 1));
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(bbox.GetLowPos()[0], bbox.GetLowPos()[1], 0.9);
+		glVertex3f(bbox.GetHighPos()[0], bbox.GetLowPos()[1], 0.9);
+		glVertex3f(bbox.GetHighPos()[0], bbox.GetHighPos()[1], 0.9);
+		glVertex3f(bbox.GetLowPos()[0], bbox.GetHighPos()[1], 0.9);
+		glEnd();
+		glLineWidth(1.5);
+		glColor4f(1, 0, 0, 1);
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(bbox.GetLowPos()[0], bbox.GetLowPos()[1], 0.99);
+		glVertex3f(bbox.GetHighPos()[0], bbox.GetLowPos()[1], 0.99);
+		glVertex3f(bbox.GetHighPos()[0], bbox.GetHighPos()[1], 0.99);
+		glVertex3f(bbox.GetLowPos()[0], bbox.GetHighPos()[1], 0.99);
 		glEnd();
 	}
 	glLineWidth(1);

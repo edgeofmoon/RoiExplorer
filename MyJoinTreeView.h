@@ -15,6 +15,7 @@ public:
 
 	virtual void Render();
 	virtual MyVec4i GetName(const MyVec2i& pixelPos) const;
+	bool IsSegmentInView(const MySegmentNode* seg) const;
 
 	virtual MyVec2i ComputePixelPosition(const MyVec2f& geoPos) const;
 	virtual MyVec2f ComputeGeometryPosition(const MyVec2i& pixPos) const;
@@ -45,7 +46,14 @@ public:
 	MyRoiStatisticsDrawerSPtr GetStatisticsDrawer(){
 		return mStatisticsDrawer;
 	}
+	void SetComponentVisible(int component){
+		mComponentVisible[component] = true;
+	}
+	void UnsetComponentVisible(int component){
+		mComponentVisible[component] = false;
+	}
 protected:
+	bool mComponentVisible[3];
 	MyJoinTreeDrawerSPtr mJoinTreeDrawer;
 	MyBloomDrawingHelperSPtr mBloomDrawer;
 	MyRoiStatisticsDrawerSPtr mStatisticsDrawer;

@@ -35,11 +35,11 @@ public:
 	const MyVec2f& GetBaseBoxVerticalRange() const{
 		return mBaseBoxVerticalRange;
 	}
-	void SetTScoreBoxHeight(float h){
-		mTScoreBoxHeight = h;
+	void SetBarChartHeight(float h){
+		mBarChartHeight = h;
 	}
-	float GetTScoreBoxHeight() const{
-		return mTScoreBoxHeight;
+	float GetBarChartHeight() const{
+		return mBarChartHeight;
 	}
 	void SetBaseBoxWidth(float w){
 		mBaseBoxWidth = w;
@@ -63,7 +63,7 @@ protected:
 
 	// parameter
 	MyVec2f mBaseBoxVerticalRange;
-	float mTScoreBoxHeight;
+	float mBarChartHeight;
 	float mBaseBoxWidth;
 	float mSmallBoxWidth;
 

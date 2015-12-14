@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SimpleSignal.h"
+
 extern int windowWidth, windowHeight;
 extern void myGlutDisplay();
 extern void myGlutReshape(int w, int h);
@@ -17,41 +19,40 @@ public:
 
 	static void GetViewport(int &x, int &y, int &w, int &h);
 	static void InitGL(int w,int h);
-	void AddUIs();
+	static void AddUIs();
 
 	static int main_window;
 
-	/*** Magnifier ***/
-	float UI_magnifier_radius;
-	float UI_magnifier_scale;
-	float UI_fishEye_focusRadiusRatio;
+	/*** Event Signals ***/
+	static Signal1< int > Signal_Event;
+	static void SignalEvent(int event){
+		Signal_Event(event);
+	}
 
-	/*** Components ***/
-	int UI_drawTracks;
-	int UI_drawTrackVol;
-	int UI_drawMesh;
-	int UI_drawContour;
-	int UI_2DLegend;
-	int UI_hoverOn3D;
-	int UI_hoverOn2D;
+	/*** Camera Signals ***/
+	static Signal1< int > Signal_SetViewAngle;
+	static void SignalSetViewAngle(int viewAngle){
+		Signal_SetViewAngle(viewAngle);
+	}
 
-	/*** Track Vis ***/
-	float UI_trackDensityFilter;
-	float UI_sampleRate;
-	float UI_decayFactor;
-	float UI_transparencyExponent;
+	/*** Component Signals ***/
+	static int mComponentToggle[4];
+	static Signal1< int > Signal_EnableComponent;
+	static Signal1< int > Signal_DisableComponent;
+	static void SignalToggleComponents(int component){
+		if (mComponentToggle[component]){
+			Signal_EnableComponent(component);
+		}
+		else {
+			Signal_DisableComponent(component);
+		}
+	}
 
-	/*** Label ***/
-	float UI_labelDrawRatio;
-	int UI_labelSolid;
-
-	/*** Regions ***/
-	float UI_roiRenderRatio;
-	float UI_linkDrawThreshold;
-
-	/*** Bubble Sets ***/
-	float UI_bubbleThreshold;
-	float UI_bubbleMaxRadius;
-	float UI_bubbleCoreRadius;
+	/*** Rendering Signals ***/
+	static float mValuefs[2];
+	static Signal2< int, float > Signal_SetValuef;
+	static void SignalSetValues(int idx){
+		Signal_SetValuef(idx, mValuefs[idx]);
+	}
 };
 

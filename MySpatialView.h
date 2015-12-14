@@ -14,11 +14,14 @@ public:
 	~MySpatialView();
 
 	void Render();
-
+	MyTrackBall& GetTrackBall(){
+		return mTrackBall;
+	};
 	void AddSurfaceRenderer(MySurfaceRendererSPtr surfaceRenderer);
 	void RemoveSurfaceRenderer(MySurfaceRendererSPtr surfaceRenderer);
 	void SetMeshRenderer(MySurfaceRendererSPtr meshRenderer);
 	MySurfaceRendererSPtr GetSurfaceRendererByName(const MyVec4i& name);
+	MySurfaceRendererSPtr GetMeshRenderer() const { return mMeshRenderer; };
 
 	virtual int HandleMouseBottonEvent(int button, int state, int x, int y);
 	virtual int HandleMouseWheelEvent(int button, int dir, int x, int y);

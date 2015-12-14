@@ -25,7 +25,8 @@ void MyRoiView::Render(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	RenderFrame();
+	RenderDistributionFrame();
+	RenderStatisticsFrame();
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -212,7 +213,7 @@ void MyRoiView::RenderBrushLine(){
 	glLineWidth(1);
 }
 
-void MyRoiView::RenderFrame(){
+void MyRoiView::RenderDistributionFrame(){
 	MyVec2f boxRange_Y = mRoiDrawer->GetLayoutManager()->GetBaseBoxVerticalRange();
 	float boarder_x = 0.00001;
 	glMatrixMode(GL_PROJECTION);
@@ -223,16 +224,6 @@ void MyRoiView::RenderFrame(){
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-
-	/*
-	glColor4f(0, 0, 0, 1);
-	glBegin(GL_LINE_LOOP);
-	glVertex3f(-boarder_x, 0, 0.99);
-	glVertex3f(1 + boarder_x, 0, 0.99);
-	glVertex3f(1 + boarder_x, 1, 0.99);
-	glVertex3f(-boarder_x, 1, 0.99);
-	glEnd();
-	*/
 
 	MyVec2f range = mRoiDrawer->GetHistogramRange();
 	float rangeSize = range[1] - range[0];
@@ -246,7 +237,7 @@ void MyRoiView::RenderFrame(){
 	for (int i = 0; i <= nStep; i++){
 		float height = boxRange_Y[0] + subStepHeight*i;
 		if (i % 5 == 0){
-			glColor4f(0, 0, 0, 1);
+			glColor4f(0.3, 0.3, 3.f, 1.f);
 			glRasterPos2f(-boarder_x, height);
 			string str = to_string(range[0] + subStep*i);
 			str.resize(3);
@@ -264,13 +255,64 @@ void MyRoiView::RenderFrame(){
 		glVertex3f(1 + boarder_x, height, -0.1);
 		glEnd();
 	}
-
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+}
 
 
+void MyRoiView::RenderStatisticsFrame(){
+	float baseY = mRoiDrawer->GetLayoutManager()->GetBaseBoxVerticalRange()[1];
+	float topY = baseY + mRoiDrawer->GetLayoutManager()->GetBarChartHeight();
+	MyVec2f boxRange_Y(baseY, topY);
+	float boarder_x = 0.00001;
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(-boarder_x * 2, 1 + boarder_x * 2,
+		mClipBox.GetLowPos()[1], mClipBox.GetHighPos()[1], -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// t score starts with 0
+	MyVec2f statisticsRange = mRoiDrawer->GetSegmentAssembleGroup()->GetTScoreRange();
+	MyVec2f absStatisticsSizeRange(0, std::max(fabs(statisticsRange[0]), fabs(statisticsRange[1])));
+	int magnitude = floor(log10f(absStatisticsSizeRange[1]));
+	float step = pow(10.f, magnitude);
+	float subStep = step / 5;
+	float nStep = round(absStatisticsSizeRange[1] / subStep);
+	float subStepHeight = (boxRange_Y[1] - boxRange_Y[0]) / nStep;
+
+	//cout << "substepSize: " << subStep << endl;
+	//cout << "subStepHeight: " << subStepHeight << endl;
+	// starts from 1 to avoid overlapping
+	for (int i = 1; i <= nStep; i++){
+		float height = boxRange_Y[0] + subStepHeight*i;
+		if (i % 5 == 0){
+			glColor4f(1.f, 0.3, 0.3, 1.f);
+			glRasterPos2f(-boarder_x, height);
+			string str = to_string(subStep*i);
+			str.resize(3);
+			glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)str.c_str());
+
+			glColor4f(0.5, 0.5, 0.5, 0.8);
+			glLineWidth(1);
+		}
+		else{
+			glColor4f(0.8, 0.8, 0.8, 0.3);
+			glLineWidth(0.5);
+		}
+		glBegin(GL_LINES);
+		glVertex3f(-boarder_x, height, -0.1);
+		glVertex3f(1 + boarder_x, height, -0.1);
+		glEnd();
+	}
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 void MyRoiView::RenderMarks() const{
@@ -298,7 +340,7 @@ void MyRoiView::RenderMarks() const{
 			glVertex3f(box.GetLowPos()[0], box.GetLowPos()[1], -0.1);
 			glEnd();
 			*/
-			box.ScaleAtCenter(MyVec2f(1.05, 1.05));
+			box.ScaleAtCenter(MyVec2f(1.05, 1.02));
 			glBegin(GL_TRIANGLE_FAN);
 			glVertex3f(box.GetCenter()[0], box.GetCenter()[1], -0.05);
 			glVertex3f(box.GetLowPos()[0], box.GetLowPos()[1], -0.05);

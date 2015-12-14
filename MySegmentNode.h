@@ -24,6 +24,7 @@ public:
 	int GetNumChildren() const;
 
 	MyVoxContainerfSPtr MakeAllVoxes() const;
+	void UpdateDescendantTotalVoxelCount();
 	void SetUniqueVoxes(MyVoxContainerfSPtr voxel) ;
 	bool HasUniqueVoxel() const;
 

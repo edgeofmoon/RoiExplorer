@@ -56,7 +56,8 @@ protected:
 	void UnselectAll();
 	void RenderBrushLine();
 
-	void RenderFrame();
+	void RenderDistributionFrame();
+	void RenderStatisticsFrame();
 
 protected:
 	// status

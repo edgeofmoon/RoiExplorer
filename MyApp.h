@@ -35,6 +35,11 @@ public:
 	void ConnectAll();
 	void AddRoiSurface(MyVec4i name);
 	void RemoveRoiSurface(MyVec4i name);
+	void SetViewAngle(int viewAngle);
+	void EnableComponent(int component);
+	void DisableComponent(int component);
+	void SetValuef(int component, float value);
+	void HandleEvent(int eveIdx);
 
 	// MyApp_interactions
 protected:
@@ -47,6 +52,7 @@ protected:
 	//int RemoveRoi();
 	int DisableRoi(MyRoiViewSPtr roiView);
 	int EnableRoi(MyRoiViewSPtr roiView);
+	int ClearJoinTreeSurfaces();
 	int UpdateJoinTree();
 	int UpdateAssembleGroup();
 	int AddAssembleGroup();
@@ -67,6 +73,8 @@ protected:
 	MyRoiViewSPtr mSecondRoiView;
 	MyConnectorViewSPtr mConnectorView;
 
+	bool mComponentVisible[6];
+	int mAsmbVolLimit;
 
 	MyRoiViewConnectorDrawer mRoiConnectorDrawer;
 

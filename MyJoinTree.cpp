@@ -154,7 +154,7 @@ void MyJoinTree::Update(){
 	mFilter->Update();
 	mJoinRoot = MakeJoinTree(joinRoot);
 
-	//CheckJoinTreeStatus(mJoinRoot.get());
+	CheckJoinTreeStatus(mJoinRoot.get());
 }
 
 bool MyJoinTree::VoxelSortLess::operator()(int index1, int index2){
@@ -275,7 +275,10 @@ MySegmentNodeSPtr MyJoinTree::MakeJoinTree(MyComponent* joinRoot){
 			}
 		}
 	}
+	root->UpdateDescendantTotalVoxelCount();
 	cout << "Join tree has " << nSegs << " segments\n";
+	cout << "Join tree has " << root->GetNumTotalVoxes() 
+		<< " (" << mVolumn->GetVolume() << ") voxels\n";
 	return root;
 }
 
@@ -288,8 +291,10 @@ void MyJoinTree::CheckJoinTreeStatus(const MySegmentNode* joinRoot) const{
 	while (!stackSegments.empty()){
 		const MySegmentNode* thisSegment = stackSegments.top();
 		stackSegments.pop();
-		for (int i = 0; i < thisSegment->GetNumParents(); i++){
-			stackSegments.push(thisSegment->GetParent(i).get());
+		int numVoxels = 0;
+		for (int i = 0; i < thisSegment->GetNumChildren(); i++){
+			stackSegments.push(thisSegment->GetChild(i).get());
+			numVoxels += thisSegment->GetChild(i)->GetNumTotalVoxes();
 		}
 		if (thisSegment->HasUniqueVoxel()){
 			MyVoxContainerfScPtr voxels = thisSegment->GetUniqueVoxes();
@@ -306,6 +311,10 @@ void MyJoinTree::CheckJoinTreeStatus(const MySegmentNode* joinRoot) const{
 			}
 			numVoxelsChecked += voxels->GetNumVoxes();
 			numSegmentsChecked++;
+			numVoxels += voxels->GetNumVoxes();
+			if (numVoxels != thisSegment->GetNumTotalVoxes()){
+				cout << "Error: segment total voxel counting wrong!\n";
+			}
 		}
 	}
 	cout << "Join tree checks in " << numSegmentsChecked << " segments\n";

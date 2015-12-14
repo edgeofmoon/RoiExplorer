@@ -7,6 +7,7 @@ MySurfaceRenderer::MySurfaceRenderer()
 	mIndexSize = 0;
 	mName = MyVec4i(-1, -1, -1, -1);
 	mColor = MyVec4f(1, 0, 0, 1);
+	mTransparency = 1;
 }
 
 
@@ -40,6 +41,11 @@ void MySurfaceRenderer::Render(){
 	if (mName[0] >= 0){
 		int nameLocation = glGetUniformLocation(mShaderProgram, "name");
 		glUniform4i(nameLocation, mName[0], mName[1], mName[2], mName[3]);
+	}
+
+	int transparencyLocation = glGetUniformLocation(mShaderProgram, "transExp");
+	if (transparencyLocation >= 0 && mTransparency!= 1){
+		glUniform1f(transparencyLocation, mTransparency);
 	}
 
 	glDrawElements(GL_TRIANGLES, mIndexSize, GL_UNSIGNED_INT, 0);

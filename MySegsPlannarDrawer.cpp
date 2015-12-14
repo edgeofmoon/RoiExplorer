@@ -25,19 +25,29 @@ void MySegsPlanarDrawer::Update(){
 	MyMapScPtr<const MySegmentNode*, MyBox2f> boxesOut = mLayoutManager->GetBoxesOut();
 	mLabelManager->SetBoxes(boxesOut);
 	mLabelManager->Update();
+	/*
 	mHistogramRange = mSegAssembleGroup->GetThreeSigmaRange();
 	// round range
 	mHistogramRange[1] = ceil(mHistogramRange[1] * 10) / 10;
 	mHistogramRange[0] = floor(mHistogramRange[0] * 10) / 10;
+	*/
+	// use fixed range
+	mHistogramRange = MyVec2f(0, 1);
 }
 
 void MySegsPlanarDrawer::Render(){
+	glPushAttrib(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	this->DrawBoxes();
 	for (int i = 0; i < mSegAssembleGroup->size(); i++){
 		this->DrawDistribution(i);
 	}
+	glLineWidth(0.5);
 	this->DrawNetwork();
+	glLineWidth(1);
 	mLabelManager->Render();
+	glPopAttrib();
 }
 
 void MySegsPlanarDrawer::Resize(int width, int height){
@@ -62,8 +72,9 @@ void MySegsPlanarDrawer::DrawNetwork(){
 				int jIdx = jNode->GetIndex();
 				if (i == j) continue;
 				float conTrks = cMat->At(i, j);
-				float ratio = conTrks / regionTrks;
-				if (ratio > mLinkDrawThreshold){
+				float regionTrks2 = cMat->At(j, j);
+				float J_index = conTrks / (regionTrks+regionTrks2-conTrks);
+				if (J_index > mLinkDrawThreshold){
 					//MyVec4f color(1 - ratio, ratio, 0, 0.5);
 					MyVec4f color(0, 0, 0, 0.5);
 					MyVec2f fromAnchor;
@@ -127,7 +138,7 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 	MyVec3f dir3 = dir.toDim<3>(0);
 	MyVec3f up(0, 0, 1);
 	MyVec3f radDir = dir3^up;
-	float offsetAlpha = 0.2f;
+	float offsetAlpha = 0.4f;
 	float offsetBeta = 0.25f / offsetAlpha;
 	float radius = length * (offsetBeta + offsetAlpha) / 2;
 	MyVec3f center = midWay.toDim<3>(0) + radDir*(offsetBeta*length - radius);
@@ -143,13 +154,14 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i <= numStep; i++){
 		//glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
-		glColor4f(color[0], color[1], color[2], 1.f);
+		glColor4f(color[0], color[1], color[2], 0.8f);
 		float angle = startAngle + i*delAngle;
 		float halfWidth = (startWidth + i*delWidth) / 2;
 		MyVec2f leftPos(center[0] + cos(angle)*(radius - halfWidth),
 			center[1] + sin(angle)*(radius - halfWidth));
 		MyGraphicsTool::Vertex(leftPos);
 	}
+	/*
 	for (int i = numStep; i >= 0; i--){
 		//glColor4f(color[0], color[1], color[2], 1.f - (i / (float)numStep) / 2);
 		glColor4f(color[0], color[1], color[2], 1.f);
@@ -159,6 +171,7 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 			center[1] + sin(angle)*(radius + halfWidth));
 		MyGraphicsTool::Vertex(RightPos);
 	}
+	*/
 	glEnd();
 }
 
@@ -183,7 +196,8 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		MyVec2f base = theBox.GetLowPos();
 		float maxHeight = theBox.GetSize(0);
 		//float maxWidth = theBox.GetSize(1);
-		float maxWidth = 0.2;
+		float maxWidth = mLayoutManager->GetBaseBoxVerticalRange()[1]
+			- mLayoutManager->GetBaseBoxVerticalRange()[0];
 		glColor4f(0, 0, 0, 1);
 		glBegin(GL_LINE_LOOP);
 		for (int ic = -steps; ic <= steps; ic++){
@@ -227,6 +241,21 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		// a hack: here small width means the roi is disabled
 		if (theBox.GetSize(0) < 0.01) continue;
 		glColor4f(0, 0, 0, 1);
+		float effectSize = mSegAssembleGroup->GetEffectSizes().at(node);
+		MyString valueStr(effectSize);
+		valueStr.resize(5);
+		if (effectSize < 0){
+			glColor4f(1, 0, 0, 1);
+		}
+		else{
+			glColor4f(0, 0, 0, 1);
+		}
+		glRasterPos2f(base[0], base[1] - maxWidth/7);
+		glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)valueStr.c_str());
+
+		/*
+		// draw another
+		glColor4f(0, 0, 0, 1);
 		float tScore = mSegAssembleGroup->GetTScores().at(node);
 		MyString tStr(tScore);
 		tStr.resize(4);
@@ -236,8 +265,8 @@ void MySegsPlanarDrawer::DrawDistribution(int idx){
 		else{
 			glColor4f(0, 0, 1, 1);
 		}
-		glRasterPos2f(base[0], base[1] - maxWidth / 5);
+		glRasterPos2f(base[0], base[1] - maxWidth / 2.5);
 		glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)tStr.c_str());
-
+		*/
 	}
 }

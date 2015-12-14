@@ -30,6 +30,12 @@ public:
 	const MyVec4f& GetColor() const{
 		return mColor;
 	}
+	void SetTransparency(float t){
+		mTransparency = t;
+	}
+	float GetTransparency() const{
+		return mTransparency;
+	}
 protected:
 	const MyArray3f* mVertices;
 	const MyArray3f* mNormals;
@@ -38,6 +44,9 @@ protected:
 	MyVec4i mName;
 	MyVec4f mColor;
 	int mIndexSize;
+
+	// rendering parameter
+	float mTransparency;
 
 	// shader program pointers
 	unsigned int mShaderProgram;

@@ -8,8 +8,8 @@ using namespace std;
 MySegNodeInfoLayout2D::MySegNodeInfoLayout2D()
 {
 	mBoxesOut = std::make_shared<MyMap<const MySegmentNode*, MyBox2f>>();
-	mBaseBoxVerticalRange = MyVec2f(0.4, 0.6);
-	mTScoreBoxHeight = 0.2;
+	mBaseBoxVerticalRange = MyVec2f(0.25, 0.6);
+	mBarChartHeight = 0.3;
 	mBaseBoxWidth = 0.05;
 	mSmallBoxWidth = 0.005;
 }
@@ -208,12 +208,20 @@ MyBox2f MySegNodeInfoLayout2D::ComputeBox(const MySegmentNode* seg) const{
 			}
 		}
 	}
-	float maxTScoreHeight = mTScoreBoxHeight;
+	float maxBarChartHeight = mBarChartHeight;
+	// use t score
 	MyVec2f tScoreRange = mSegAsmGroup->GetTScoreRange();
 	float tScoreRangeAbs = max(fabs(tScoreRange[0]), fabs(tScoreRange[1]));
 	float tScore = mSegAsmGroup->GetTScores().at(seg);
-	float tScoreHeight = fabs(tScore) / tScoreRangeAbs * maxTScoreHeight;
+	float barChartHeight = fabs(tScore) / tScoreRangeAbs * maxBarChartHeight;
+	/*
+	// use effect size
+	MyVec2f effectSizeRange = mSegAsmGroup->GetEffectSizeRange();
+	float effectSizeRangeAbs = max(fabs(effectSizeRange[0]), fabs(effectSizeRange[1]));
+	float effectSize = mSegAsmGroup->GetEffectSizes().at(seg);
+	float barChartHeight = fabs(effectSize) / effectSizeRangeAbs * maxBarChartHeight;
+	*/
 	MyVec2f lowPos(0, mBaseBoxVerticalRange[0]);
-	MyVec2f highPos(boxWidth, mBaseBoxVerticalRange[1] + tScoreHeight);
+	MyVec2f highPos(boxWidth, mBaseBoxVerticalRange[1] + barChartHeight);
 	return MyBox2f(lowPos, highPos);
 }

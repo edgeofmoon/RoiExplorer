@@ -251,6 +251,38 @@ float MyMathHelper::MinDistance(const MyLine2f& line, const MyVec2f& pt){
 	return (pt - proj).norm();
 }
 
+My3dArrayf* MyMathHelper::MakeGaussianFilter(const My3dArrayf* vol, float sigma){
+	My3dArrayf* rst = new My3dArrayf(vol->GetDimSizes(), 0);
+	MyVec3i dim = vol->GetDimSizes();
+	float sigSqad = sigma*sigma;
+	for (int x = 0; x < dim[0]; x++){
+		for (int y = 0; y < dim[1]; y++){
+			for (int z = 0; z < dim[2]; z++){
+				MyVec3i vPos(x, y, z);
+				float v = vol->At(vPos);
+				MyVec3i nbrDimLow(std::max(x - (int)(3 * sigma), 0),
+					std::max(y - (int)(3 * sigma), 0),
+					std::max(z - (int)(3 * sigma), 0));
+				MyVec3i nbrDimHigh(std::min(x + (int)(3 * sigma), dim[0] - 1),
+					std::min(y + (int)(3 * sigma), dim[1] - 1),
+					std::min(z + (int)(3 * sigma), dim[2] - 1));
+				for (int i = nbrDimLow[0]; i <= nbrDimHigh[0]; i++){
+					for (int j = nbrDimLow[1]; j <= nbrDimHigh[1]; j++){
+						for (int k = nbrDimLow[2]; k <= nbrDimHigh[2]; k++){
+							MyVec3i nPos(i, j, k);
+							float distSqd = (i - x)*(i - x) + (j - y)*(j - y) + (k - z)*(k - z);
+							float weight = exp(-distSqd / sigSqad);
+							// remember to normalize
+							rst->operator[](nPos) += weight*v / sigma;
+						}
+					}
+				}
+			}
+		}
+	}
+	return rst;
+}
+
 char MyMathHelper::GetCohenSutherlandByte(const MyVec2f pos, const MyBox2f& box){
 	char byte = 0;
 	const MyVec2f& low = box.GetLowPos();

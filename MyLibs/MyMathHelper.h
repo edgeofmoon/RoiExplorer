@@ -6,6 +6,7 @@
 #include "MyBox.h"
 #include "MyLine.h"
 #include "MyPolyLine.h"
+#include "MyArrayMD.h"
 
 class MyMathHelper
 {
@@ -38,6 +39,8 @@ public:
 	//static bool IsIntersected(const MyBox2f& box, const MyPolyline2f& polyline);
 
 	static float MinDistance(const MyLine2f& line, const MyVec2f& point);
+
+	static My3dArrayf* MakeGaussianFilter(const My3dArrayf* vol, float sigma);
 
 protected:
 	static MyArrayi Factorials;

@@ -3,17 +3,17 @@
 
 int MyUiPanel::main_window = -1;
 
+Signal1< int > MyUiPanel::Signal_SetViewAngle;
+Signal1< int > MyUiPanel::Signal_EnableComponent;
+Signal1< int > MyUiPanel::Signal_DisableComponent;
+Signal2< int, float > MyUiPanel::Signal_SetValuef;
+Signal1< int > MyUiPanel::Signal_Event;
+
+int MyUiPanel::mComponentToggle[4] = { 1, 1, 1, 1 };
+float MyUiPanel::mValuefs[2] = {5.f, 0.1f};
+
 MyUiPanel::MyUiPanel()
 {
-	UI_trackDensityFilter = 0.1;
-	UI_sampleRate = 1024;
-	UI_decayFactor = 1024;
-	UI_transparencyExponent = 16;
-	UI_roiRenderRatio = 1;
-	UI_linkDrawThreshold = 0.5;
-	UI_bubbleThreshold = 0;
-	UI_bubbleMaxRadius = 0.1;
-	UI_bubbleCoreRadius = 0.025;
 }
 
 
@@ -32,7 +32,7 @@ void MyUiPanel::InitGL(int w, int h){
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(w, h);
-	main_window = glutCreateWindow("Cohort Brain Comparison");
+	main_window = glutCreateWindow("Brain Cohort Visualization");
 	glewInit();
 	glutDisplayFunc(myGlutDisplay);
 	GLUI_Master.set_glutDisplayFunc(myGlutDisplay);
@@ -52,101 +52,49 @@ void MyUiPanel::AddUIs(){
 	GLUI* glui = GLUI_Master.create_glui_subwindow(main_window,
 		GLUI_SUBWINDOW_RIGHT);
 
+	/*** Camera ***/
+	GLUI_Panel* viewpoint_panel = new GLUI_Panel(glui, "Camera");
+	viewpoint_panel->set_alignment(GLUI_ALIGN_LEFT);
+	new GLUI_Button(viewpoint_panel, "Superior", 1, SignalSetViewAngle);
+	new GLUI_Button(viewpoint_panel, "Inferior", 2, SignalSetViewAngle);
+	new GLUI_Button(viewpoint_panel, "Right", 3, SignalSetViewAngle);
+	new GLUI_Button(viewpoint_panel, "Left", 4, SignalSetViewAngle);
+	new GLUI_Button(viewpoint_panel, "Posterior", 5, SignalSetViewAngle);
+	new GLUI_Button(viewpoint_panel, "Anterior", 6, SignalSetViewAngle);
 
-	/*** Magnifier ***/
-	GLUI_Rollout *magnifier_panel = new GLUI_Rollout(glui, "Magnifier", 0);
-	magnifier_panel->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_StaticText(magnifier_panel, "Radius");
-	GLUI_Scrollbar* magnifier_radiusSlider = new GLUI_Scrollbar
-		(magnifier_panel, "Magnify Radius", GLUI_SCROLL_HORIZONTAL, &UI_magnifier_radius);
-	magnifier_radiusSlider->set_int_limits(0, 600);
-	magnifier_radiusSlider->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_StaticText(magnifier_panel, "Scale");
-	GLUI_Scrollbar* magnifier_scaleSlider = new GLUI_Scrollbar
-		(magnifier_panel, "Magnify Scale", GLUI_SCROLL_HORIZONTAL, &UI_magnifier_scale);
-	magnifier_scaleSlider->set_float_limits(1, 10);
-	magnifier_scaleSlider->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_StaticText(magnifier_panel, "Focus");
-	GLUI_Scrollbar* magnifier_focusRatioSlider = new GLUI_Scrollbar
-		(magnifier_panel, "Focus Radius", GLUI_SCROLL_HORIZONTAL, &UI_fishEye_focusRadiusRatio);
-	magnifier_focusRatioSlider->set_float_limits(0, 1);
-	magnifier_focusRatioSlider->set_alignment(GLUI_ALIGN_LEFT);
-
+	/*** Event ***/
+	GLUI_Panel* Event_panel = new GLUI_Panel(glui, "Edit");
+	Event_panel->set_alignment(GLUI_ALIGN_LEFT);
+	new GLUI_Button(Event_panel, "Disable ROI", 1, SignalEvent);
+	new GLUI_Button(Event_panel, "Enable ROI", 2, SignalEvent);
+	new GLUI_Button(Event_panel, "Clear Tree", 3, SignalEvent);
+	new GLUI_Button(Event_panel, "Second Cohort", 4, SignalEvent);
+	new GLUI_Button(Event_panel, "Change Tree", 5, SignalEvent);
+	new GLUI_Button(Event_panel, "Create ROI", 6, SignalEvent);
 
 	/*** Components ***/
-	GLUI_Rollout *component_panel = new GLUI_Rollout(glui, "Component", 0);
+	GLUI_Panel *component_panel = new GLUI_Panel(glui, "Component");
 	component_panel->set_alignment(GLUI_ALIGN_LEFT);
-	GLUI_Checkbox* trackCheckbox = new GLUI_Checkbox(component_panel, "Tracks", &UI_drawTracks);
-	GLUI_Checkbox* trackVolCheckbox = new GLUI_Checkbox(component_panel, "Track Volume", &UI_drawTrackVol);
-	GLUI_Checkbox* meshCheckbox = new GLUI_Checkbox(component_panel, "Cortex Mesh", &UI_drawMesh);
-	GLUI_Checkbox* drawContour0Checkbox = new GLUI_Checkbox(component_panel, "Contour", &UI_drawContour);
-	GLUI_Checkbox* Legend_Checkbox = new GLUI_Checkbox(component_panel, "Legend", &UI_2DLegend);
-	GLUI_Checkbox* hoverOn3DCheckbox = new GLUI_Checkbox(component_panel, "Hover 3D", &UI_hoverOn3D);
-	GLUI_Checkbox* hoverOn2DCheckbox = new GLUI_Checkbox(component_panel, "Hover 2D", &UI_hoverOn2D);
+	new GLUI_Checkbox(component_panel, 
+		"Tree Color", &mComponentToggle[0], 0, SignalToggleComponents);
+	new GLUI_Checkbox(component_panel,
+		"Tree Stats", &mComponentToggle[1], 1, SignalToggleComponents);
+	new GLUI_Checkbox(component_panel,
+		"Tree-Roi Lines", &mComponentToggle[2], 2, SignalToggleComponents);
+	new GLUI_Checkbox(component_panel,
+		"Roi-Roi Lines", &mComponentToggle[3], 3, SignalToggleComponents);
 
-	/*** Track Vis ***/
-	GLUI_Rollout* track_panel = new GLUI_Rollout(glui, "Tracks", 0);
-	track_panel->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_StaticText(track_panel, "Density Filter");
-	GLUI_Scrollbar* trackDensity_Slider = new GLUI_Scrollbar
-		(track_panel, "Density Filter", GLUI_SCROLL_HORIZONTAL, &UI_trackDensityFilter);
-	trackDensity_Slider->set_float_limits(0, 1);
-	new GLUI_StaticText(track_panel, "Sample Rate");
-	GLUI_Scrollbar* sampleRate_Slider = new GLUI_Scrollbar
-		(track_panel, "Sample Rate", GLUI_SCROLL_HORIZONTAL, &UI_sampleRate);
-	sampleRate_Slider->set_float_limits(8, 2048);
-	new GLUI_StaticText(track_panel, "Decay Factor");
-	GLUI_Scrollbar* decayFactor_Slider = new GLUI_Scrollbar
-		(track_panel, "Decay Factor", GLUI_SCROLL_HORIZONTAL, &UI_decayFactor);
-	decayFactor_Slider->set_float_limits(8, 2048);
-	new GLUI_StaticText(track_panel, "Mesh Transparency");
-	GLUI_Scrollbar* meshTransparency_Slider = new GLUI_Scrollbar
-		(track_panel, "Mesh Transparency", GLUI_SCROLL_HORIZONTAL, &UI_transparencyExponent);
-	meshTransparency_Slider->set_float_limits(0, 128);
-
-	/*** Label ***/
-	GLUI_Rollout* label_panel = new GLUI_Rollout(glui, "Label", 0);
-	label_panel->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_StaticText(label_panel, "Display Ratio");
-	GLUI_Scrollbar* labelDrawRatioScrollbar = new GLUI_Scrollbar(label_panel, "Label Ratio", GLUI_SCROLL_HORIZONTAL, &UI_labelDrawRatio);
-	labelDrawRatioScrollbar->set_float_limits(0, 1);
-	GLUI_Checkbox* labelSolid_Checkbox = new GLUI_Checkbox(label_panel, "Solid", &UI_labelSolid);
-
-	/*** Regions ***/
-	GLUI_Rollout* roi_panel = new GLUI_Rollout(glui, "ROI", 0);
-	new GLUI_StaticText(roi_panel, "Render Ratio");
-	GLUI_Scrollbar* roiRenderRatio_Slider = new GLUI_Scrollbar
-		(roi_panel, "Render Ratio", GLUI_SCROLL_HORIZONTAL, &UI_roiRenderRatio);
-	roiRenderRatio_Slider->set_float_limits(0, 1);
-	new GLUI_StaticText(roi_panel, "Link Threshold");
-	GLUI_Scrollbar* LinkThreshold_Slider = new GLUI_Scrollbar
-		(roi_panel, "Link Threshold", GLUI_SCROLL_HORIZONTAL, &UI_linkDrawThreshold);
-	LinkThreshold_Slider->set_float_limits(0, 1);
-
-	/*** Bubble Sets ***/
-	GLUI_Rollout* bubble_panel = new GLUI_Rollout(glui, "BubbleSets", 0);
-	new GLUI_StaticText(bubble_panel, "Contour Threshold");
-	GLUI_Scrollbar* bubbleThreshold_Slider = new GLUI_Scrollbar
-		(bubble_panel, "Contour Threshold", GLUI_SCROLL_HORIZONTAL, &UI_bubbleThreshold);
-	roiRenderRatio_Slider->set_float_limits(0, 1);
-	new GLUI_StaticText(bubble_panel, "Max Affected Radius");
-	GLUI_Scrollbar* bubbleMaxRadius_Slider = new GLUI_Scrollbar
-		(bubble_panel, "Max Affected Radius", GLUI_SCROLL_HORIZONTAL, &UI_bubbleMaxRadius);
-	bubbleMaxRadius_Slider->set_float_limits(0, 0.5);
-	new GLUI_StaticText(bubble_panel, "Core Affected Radius");
-	GLUI_Scrollbar* bubbleCoreRadius_Slider = new GLUI_Scrollbar
-		(bubble_panel, "Core Affected Radius", GLUI_SCROLL_HORIZONTAL, &UI_bubbleCoreRadius);
-	bubbleCoreRadius_Slider->set_float_limits(0, 0.1);
-
-	/*** Camera ***/
-	GLUI_Rollout* viewpoint_panel = new GLUI_Rollout(glui, "Camera", 0);
-	viewpoint_panel->set_alignment(GLUI_ALIGN_LEFT);
-	new GLUI_Button(viewpoint_panel, "Superior_Up", 1);
-	new GLUI_Button(viewpoint_panel, "Superior_Down", 2);
-	new GLUI_Button(viewpoint_panel, "Right", 3);
-	new GLUI_Button(viewpoint_panel, "Left", 4);
-	new GLUI_Button(viewpoint_panel, "Posterior", 5);
-	new GLUI_Button(viewpoint_panel, "Anterior", 6);
+	/*** Rendering ***/
+	GLUI_Panel* render_panel = new GLUI_Panel(glui, "Rendering");
+	render_panel->set_alignment(GLUI_ALIGN_LEFT);
+	new GLUI_StaticText(render_panel, "Transparency");
+	GLUI_Scrollbar* slider = new GLUI_Scrollbar(render_panel,
+		"Transparency", GLUI_SCROLL_HORIZONTAL, &mValuefs[0], 0, SignalSetValues);
+	slider->set_float_limits(0, 64);
+	new GLUI_StaticText(render_panel, "Track Threshold");
+	slider = new GLUI_Scrollbar(render_panel,
+		"Track Threshold", GLUI_SCROLL_HORIZONTAL, &mValuefs[1], 1, SignalSetValues);
+	slider->set_float_limits(0, 1);
 
 	glui->set_main_gfx_window(main_window);
 }

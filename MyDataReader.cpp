@@ -60,11 +60,11 @@ MyMapSPtr<int, MyString> MyDataReader::LoadRegionLabel(const char* fn){
 }
 
 MySegNodeInfoAssembleSPtr MyDataReader::ConstructAssembleFromDirectory(const char* folderStr,
-	const MyArray<MySegmentNodeSPtr>* ROIs){
+	const MyArray<MySegmentNodeSPtr>* ROIs, int maxRead){
 	MySegNodeInfoAssembleSPtr segAsmb = std::make_shared<MySegNodeInfoAssemble>();
 	MyArraySPtr<My3dArrayfScPtr> vols = std::make_shared<MyArray<My3dArrayfScPtr>>();
 	vector<string> skeletonfiles = OSCB::get_all_files_names_within_folder(folderStr);
-	for (int i = 0; i < skeletonfiles.size(); i++){
+	for (int i = 0; i < skeletonfiles.size() && i < maxRead; i++){
 		My3dArrayfSPtr ske = MyDataReader::LoadVolumeFromFile((folderStr + skeletonfiles[i]).c_str());
 		vols->PushBack(ske);
 	}

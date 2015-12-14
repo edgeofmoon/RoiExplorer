@@ -31,7 +31,9 @@ void MySpatialView::Render(){
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	MyGraphicsTool::LoadTrackBall(&mTrackBall);
+	glRotatef(180, 1, 0, 0);
 	glPushMatrix();
+	glScalef(-1, 1, 1);
 	glTranslatef(-182 / 2, -218 / 2, -182 / 2);
 	//cout << "#Renderers: " << mSurfaceRenderers.size() << endl;
 	MyMap<MySurfaceRendererSPtr, int>::iterator itr;
@@ -45,6 +47,8 @@ void MySpatialView::Render(){
 
 	MyGraphicsTool::SetViewport(MyView::GetViewport());
 	glPushMatrix();
+	// whats happening with the wrong direction???
+	glScalef(-1, 1, 1);
 	glTranslatef(-182 / 2, -218 / 2, -182 / 2);
 	for (itr = mSurfaceRenderers.begin(); itr != mSurfaceRenderers.end(); itr++){
 		itr->first->Render();
