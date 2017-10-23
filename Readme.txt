@@ -2,6 +2,7 @@ RoiExplorer
 10/23/2017
 Guohao Zhang
 bd71571@umbc.edu
+https://github.com/edgeofmoon/RoiExplorer
 
 Description:
 This program is for the project titled 
