@@ -213,7 +213,7 @@ public:
 
 	friend bool operator>(const MyVec<T, n> &a, const MyVec<T, n> &b){
 		for (int i = 0; i<n; i++){
-			if (a[i]=<b[i]){
+			if (a[i]<=b[i]){
 				return false;
 			}
 		}

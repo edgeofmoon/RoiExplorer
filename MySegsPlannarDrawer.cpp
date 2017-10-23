@@ -9,7 +9,7 @@ using namespace std;
 MySegsPlanarDrawer::MySegsPlanarDrawer()
 {
 	mLabelManager = std::make_shared<MyLabelManager>();
-	mLinkDrawThreshold = 0.5;
+	mLinkDrawThreshold = 0.1;
 }
 
 
@@ -138,7 +138,7 @@ void MySegsPlanarDrawer::DrawArrow(const MyVec2f fromPos, const MyVec2f toPos,
 	MyVec3f dir3 = dir.toDim<3>(0);
 	MyVec3f up(0, 0, 1);
 	MyVec3f radDir = dir3^up;
-	float offsetAlpha = 0.4f;
+	float offsetAlpha = 0.1f;
 	float offsetBeta = 0.25f / offsetAlpha;
 	float radius = length * (offsetBeta + offsetAlpha) / 2;
 	MyVec3f center = midWay.toDim<3>(0) + radDir*(offsetBeta*length - radius);

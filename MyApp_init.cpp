@@ -43,7 +43,7 @@
 using namespace std;
 
 void MyApp::Init(){
-	//mAsmbVolLimit = INT_MAX;
+	mAsmbVolLimit = INT_MAX;
 	//mAsmbVolLimit = 3;
 	MyVec4i GlobalViewport(0, 0, 1920, 1000);
 	float isoValue = 0.5;

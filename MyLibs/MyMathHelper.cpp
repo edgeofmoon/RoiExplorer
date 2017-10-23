@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <assert.h>
 
-#include <Eigen/Dense>
-using namespace Eigen;
+//#include <Eigen/Dense>
+//using namespace Eigen;
 using namespace std;
 // more than 40 is hardly expressable
 MyArrayi MyMathHelper::Factorials = MyArrayi(40, -1);
@@ -22,6 +22,8 @@ MyMathHelper::~MyMathHelper(void)
 }
 
 void MyMathHelper::SingularValueDecomposition(const MyMatrixf* inMat, MyMatrixf* leftMat, float * sigValues){
+	return ;
+	/*
 	int m = inMat->GetNumRows();
 	int n = inMat->GetNumCols();
 	float** a = new float*[m];
@@ -41,6 +43,7 @@ void MyMathHelper::SingularValueDecomposition(const MyMatrixf* inMat, MyMatrixf*
 
 	delete[] a;
 	delete[] v;
+	*/
 }
 
 float *w;
@@ -49,6 +52,8 @@ bool largerThan(int i,int j){
 };
 
 MyMatrixf* MyMathHelper::PCA_Projection(const MyMatrixf* dataMat, int nDim){
+	return 0;
+	/*
 	// zero-mean
 	MyMatrixf mean = dataMat->GetMeanOfCol();
 	MyMatrixf zeroMeanMat = *dataMat - mean.Duplicated(dataMat->GetNumRows(), 1);
@@ -101,6 +106,7 @@ MyMatrixf* MyMathHelper::PCA_Projection(const MyMatrixf* dataMat, int nDim){
 	MyMatrixf largestEvs = vMat.GetCols(evs);
 	MyMatrixf rst = zeroMeanMat*largestEvs;
 	return new MyMatrixf(rst);
+	*/
 }
 
 
