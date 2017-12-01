@@ -66,14 +66,16 @@ void MyApp::Init(){
 	cout << timer.GetElapsed() << " seconds to read ROIs.\n";
 	timer.Restart();
 	// control cohort
-	string folderStr = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\control\\";
+	//string folderStr = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\control\\";
+	string folderStr = "..\\..\\tmpdata\\skeletons\\control\\";
 	MySegNodeInfoAssembleSPtr segAsmb_control
 		= MyDataReader::ConstructAssembleFromDirectory(folderStr.c_str(), ROIs.get(), mAsmbVolLimit);
 	cout << timer.GetElapsed() << " seconds to construct "
 		<< segAsmb_control->GetSegmentNodeInfos()->front()->GetVolumes()->size() << " control cohort\n";
 	timer.Restart();
 	// scz cohort
-	string folderStr1 = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\scz\\";
+	//string folderStr1 = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\scz\\";
+	string folderStr1 = "..\\..\\tmpdata\\skeletons\\scz\\";
 	MySegNodeInfoAssembleSPtr segAsmb_scz
 		= MyDataReader::ConstructAssembleFromDirectory(folderStr1.c_str(), ROIs.get(), mAsmbVolLimit);
 	cout << timer.GetElapsed() << " seconds to construct "
@@ -169,7 +171,8 @@ void MyApp::Init(){
 	MyMapSPtr<int, MyString> labels = MyDataReader::LoadRegionLabel("GOBS_look_up_table.txt");
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ctr_10.trk");
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
-	MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
+	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
+	MyTracksSPtr tracks = std::make_shared<MyTracks>("..\\..\\tmpdata\\dti.trk");
 	cout << timer.GetElapsed() << " seconds to read tracks.\n";
 	timer.Restart();
 	MySegTrkNetworkSPtr network = std::make_shared<MySegTrkNetwork>();

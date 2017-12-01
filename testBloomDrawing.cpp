@@ -178,7 +178,8 @@ int main(int argc, char* argv[]){
 	MySegNodeInfoAssembleSPtr segAsmb = std::make_shared<MySegNodeInfoAssemble>();
 	MyMapSPtr<int, MyString> labels = MyDataReader::LoadRegionLabel("GOBS_look_up_table.txt");
 	MyArraySPtr<My3dArrayfScPtr> vols = std::make_shared<MyArray<My3dArrayfScPtr>>();
-	string folderStr = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\";
+	//string folderStr = "C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\skeletons\\";
+	string folderStr = "..\\..\\tmpdata\\skeletons\\";
 	vector<string> skeletonfiles = get_all_files_names_within_folder(folderStr);
 	for (int i = 0; i < skeletonfiles.size(); i++){
 		My3dArrayfSPtr ske = MyDataReader::LoadVolumeFromFile((folderStr + skeletonfiles[i]).c_str());
@@ -198,7 +199,8 @@ int main(int argc, char* argv[]){
 	timer.Restart();
 
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ctr_10.trk");
-	MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
+	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\ACR.trk");
+	MyTracksSPtr tracks = std::make_shared<MyTracks>("..\\..\\tmpdata\\ACR.trk");
 	//MyTracksSPtr tracks = std::make_shared<MyTracks>("C:\\Users\\GuohaoZhang\\Desktop\\tmpdata\\dti.trk");
 	cout << timer.GetElapsed() << " seconds to read tracks.\n";
 	timer.Restart();
